@@ -1,0 +1,15 @@
+---
+bases:
+  - ../../../docker-registry-proxy/k8s/base
+namespace: docker-registry-proxy
+
+resources:
+  - ingress.yaml
+
+patches:
+  - gcp-provider.yaml
+
+secretGenerator:
+  - name: gcp-sa
+    files:
+      - gcp-sa.json

@@ -1,0 +1,5 @@
+---
+namespace: ghost-cms
+resources:
+  - deployment.yaml
+  - namespace.yaml

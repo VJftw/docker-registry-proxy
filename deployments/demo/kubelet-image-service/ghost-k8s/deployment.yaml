@@ -1,0 +1,23 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: ghost-cms
+spec:
+  replicas: 1
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: ghost-cms
+  template:
+    metadata:
+      labels:
+        app: ghost-cms
+    spec:
+      containers:
+        - name: ghost
+          image: docker.vjpatel.me/ghost:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 2368
+              protocol: TCP

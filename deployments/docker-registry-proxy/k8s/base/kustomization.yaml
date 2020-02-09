@@ -1,0 +1,6 @@
+---
+namespace: docker-registry-proxy
+resources:
+  - deployment.yaml
+  - namespace.yaml
+  - service.yaml

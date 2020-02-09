@@ -1,0 +1,25 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: docker-registry-proxy
+spec:
+  replicas: 3
+  revisionHistoryLimit: 1
+  selector:
+    matchLabels:
+      app: docker-registry-proxy
+  template:
+    metadata:
+      labels:
+        app: docker-registry-proxy
+    spec:
+      containers:
+        - name: docker-registry-proxy
+          image: vjftw/docker-registry-proxy:latest
+          args:
+            - --network_address=tcp://:8888
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8888
+              protocol: TCP

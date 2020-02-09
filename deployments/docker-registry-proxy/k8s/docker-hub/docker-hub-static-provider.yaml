@@ -1,0 +1,19 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+spec:
+  template:
+    spec:
+      containers:
+        - name: docker-registry-proxy
+          env:
+            - name: DRP_PLUGINS
+              value: "auth-provider_static:upstream_static"
+            - name: DRP_UPSTREAM_REPOSITORY
+              value: https://index.docker.io
+            - name: DRP_UPSTREAM_AUTHENTICATION
+              value: upstream_static
+            - name: DRP_UPSTREAM_STATIC_USERNAME
+              value: foo
+            - name: DRP_UPSTREAM_STATIC_PASSWORD
+              value: bar

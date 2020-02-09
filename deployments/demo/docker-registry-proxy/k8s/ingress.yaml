@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: docker-registry-proxy
+  namespace: docker-registry-proxy
+  annotations:
+    # add an annotation indicating the issuer to use.
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  rules:
+    - host: docker.vjpatel.me
+      http:
+        paths:
+          - backend:
+              serviceName: docker-registry-proxy
+              servicePort: 80
+            path: /
+  tls: # < placing a host in the TLS config will indicate a certificate should be created
+    - hosts:
+        - docker.vjpatel.me
+      secretName: cert-docker-vjpatel-me # < cert-manager will store the created certificate in this secret.

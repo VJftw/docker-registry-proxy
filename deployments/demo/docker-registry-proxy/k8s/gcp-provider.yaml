@@ -1,0 +1,29 @@
+---
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: docker-registry-proxy
+spec:
+  template:
+    spec:
+      containers:
+        - name: docker-registry-proxy
+          env:
+            - name: DRP_UPSTREAM_REPOSITORY
+              value: https://gcr.io/test-docker-proxy-05532918
+            - name: DRP_PLUGINS
+              value: "auth-provider_static:upstream_static auth-verifier_gcp-instanceidentitydocument:gcpverifier"
+            - name: DRP_UPSTREAM_AUTHENTICATION
+              value: upstream_static
+            - name: DRP_UPSTREAM_STATIC_USERNAME
+              value: _json_key
+            - name: DRP_UPSTREAM_STATIC_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gcp-sa
+                  key: gcp-sa.json
+            # - name: DRP_AUTHENTICATION_VERIFIER
+            #   value: _gcpidd:gcpverifier
+            # - name: DRP_GCPVERIFIER_PROJECT_IDS
+            #   value: <project id>
+

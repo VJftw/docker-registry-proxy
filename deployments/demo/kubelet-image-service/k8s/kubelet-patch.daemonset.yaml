@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubelet-flag-patch
+  namespace: kube-system
+  labels:
+    k8s-app: kubelet-flag-patch
+spec:
+  selector:
+    matchLabels:
+      name: kubelet-flag-patch
+  template:
+    metadata:
+      labels:
+        name: kubelet-flag-patch
+    spec:
+      # tolerations:
+      # - key: node-role.kubernetes.io/master
+      #   effect: NoSchedule
+      hostPID: true
+      containers:
+        - name: kubelet-flag-patch
+          image: ubuntu:latest
+          command: ["/bin/bash", "-c"]
+          args:
+            - echo "wait for kubelet image service sock";
+              while [ ! -S /var/run/kubelet/kubelet-image-service.sock ]; do sleep 1; done;
+              echo "original kubelet config";
+              cat /etc/default/kubelet;
+              cat /new/kubelet.conf > /etc/default/kubelet;
+              echo "new kubelet config";
+              cat /etc/default/kubelet;
+              echo "killing kubelet process to be restarted by host";
+              ps -eF | grep bin/kubelet | head -n1 | tr -s " " | cut -f2 -d" " | xargs kill -9;
+              sleep 999999999999999999999999999999999999
+          securityContext:
+            privileged: true
+          resources:
+            limits:
+              memory: 16Mi
+            requests:
+              cpu: 16m
+              memory: 8Mi
+          volumeMounts:
+            - name: kubelet-config
+              mountPath: /etc/default/kubelet
+            - name: new-kubelet-config
+              mountPath: /new
+            - name: kubelet-image-sock
+              mountPath: /var/run/kubelet/
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: new-kubelet-config
+          configMap:
+            name: kubelet-config
+        - name: kubelet-config
+          hostPath:
+            path: /etc/default/kubelet
+        - name: kubelet-image-sock
+          hostPath:
+            path: /var/run/kubelet/

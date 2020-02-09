@@ -1,0 +1,54 @@
+package main
+
+import (
+	"strings"
+
+	"github.com/VJftw/docker-registry-proxy/pkg/cmd"
+	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
+	"github.com/VJftw/docker-registry-proxy/pkg/runtimes/docker"
+	"github.com/spf13/viper"
+
+	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1alpha2"
+)
+
+const (
+	flagAuthenticationProviders = "authentication_provider"
+)
+
+func main() {
+	viper.SetEnvPrefix("kis")
+	rootCmd := cmd.New("kubelet-image-service")
+
+	rootCmd.Flags().StringSlice(flagAuthenticationProviders, []string{}, "The authentication providers in the format `<image_prefix>=<endpoint>`")
+	viper.BindPFlag(flagAuthenticationProviders, rootCmd.Flags().Lookup(flagAuthenticationProviders))
+	grpcServer := cmd.NewGRPCServer()
+
+	preFunc := func() error {
+		authProviders, err := parseAuthenticationProviderClients()
+		if err != nil {
+			return err
+		}
+		imageService, err := docker.NewImageService(authProviders)
+		runtimeapi.RegisterImageServiceServer(grpcServer, imageService)
+		return nil
+	}
+
+	cmd.Execute(rootCmd, grpcServer, preFunc)
+}
+
+func parseAuthenticationProviderClients() (map[string]v1.AuthenticationProviderClient, error) {
+	res := map[string]v1.AuthenticationProviderClient{}
+	confs := viper.GetStringSlice(flagAuthenticationProviders)
+	for _, conf := range confs {
+		parts := strings.Split(conf, "=")
+		registryPrefix := parts[0]
+		alias := parts[1]
+		client, err := plugin.GetAuthProviderClient(alias)
+		if err != nil {
+			return nil, err
+		}
+		res[registryPrefix] = client
+	}
+	return res, nil
+}

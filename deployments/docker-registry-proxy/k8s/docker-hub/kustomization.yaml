@@ -1,0 +1,7 @@
+---
+bases:
+  - ../base
+namespace: docker-registry-proxy
+
+patches:
+  - docker-hub-static-provider.yaml

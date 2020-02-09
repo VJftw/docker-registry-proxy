@@ -1,0 +1,44 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubelet-image-service
+  labels:
+    k8s-app: kubelet-image-service
+spec:
+  selector:
+    matchLabels:
+      name: kubelet-image-service
+  template:
+    metadata:
+      labels:
+        name: kubelet-image-service
+    spec:
+      # tolerations:
+      # - key: node-role.kubernetes.io/master
+      #   effect: NoSchedule
+      containers:
+        - name: kubelet-image-service
+          imagePullPolicy: Always
+          image: docker.io/vjftw/kubelet-image-service:latest
+          args:
+            - --network_address=unix:///var/run/kubelet/kubelet-image-service.sock
+          resources:
+            limits:
+              memory: 16Mi
+            requests:
+              cpu: 16m
+              memory: 8Mi
+          volumeMounts:
+            - name: kubelet-image-sock
+              mountPath: /var/run/kubelet/
+            - name: docker-sock
+              mountPath: /var/run/docker.sock
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: kubelet-image-sock
+          hostPath:
+            path: /var/run/kubelet/
+        - name: docker-sock
+          hostPath:
+            path: /var/run/docker.sock
