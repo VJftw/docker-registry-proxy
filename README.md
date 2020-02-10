@@ -20,3 +20,7 @@ In most managed kubernetes offerings, it is difficult to modify the `kubelet` fl
 
 #### Google Kubernetes Engine (GKE)
 The DaemonSet updates `/etc/default/kubelet` on the host (using `hostPath` mounts) and then kills the `kubelet` process on the host (via `hostPID: true`) which is then restarted by the host SystemD with the new kubelet flags.
+
+#### Amazon Elastic Kubernetes Engine (EKS)
+
+TODO
