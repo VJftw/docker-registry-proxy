@@ -22,7 +22,7 @@ jobs:
     - name: Lint
       run: |
         curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.23.6
-        golangci-lint run
+        ./bin/golangci-lint run
     
     - name: Test
       run: go test -count 5 -cover ./...
