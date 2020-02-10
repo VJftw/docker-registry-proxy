@@ -18,9 +18,6 @@ jobs:
 
     - name: Get dependencies
       run: go mod vendor
-
-    - name: Build
-      run: go build -v .
     
     - name: Test
       run: go test -count 5 -cover ./...
