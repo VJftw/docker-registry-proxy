@@ -63,7 +63,9 @@ func LoadPlugins(rootCmd *cobra.Command) error {
 			default:
 				return fmt.Errorf("unsupported type: %s", attrConfig.GetAttributeType())
 			}
-			viper.BindPFlag(attrName, rootCmd.Flags().Lookup(attrName))
+			if err := viper.BindPFlag(attrName, rootCmd.Flags().Lookup(attrName)); err != nil {
+				return fmt.Errorf("could not bind pflag: %w", err)
+			}
 		}
 	}
 	return nil

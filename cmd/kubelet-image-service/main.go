@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/cmd"
@@ -21,15 +22,20 @@ func main() {
 	rootCmd := cmd.New("kubelet-image-service")
 
 	rootCmd.Flags().StringSlice(flagAuthenticationProviders, []string{}, "The authentication providers in the format `<image_prefix>=<endpoint>`")
-	viper.BindPFlag(flagAuthenticationProviders, rootCmd.Flags().Lookup(flagAuthenticationProviders))
+	if err := viper.BindPFlag(flagAuthenticationProviders, rootCmd.Flags().Lookup(flagAuthenticationProviders)); err != nil {
+		cmd.HandleErr(err)
+	}
 	grpcServer := cmd.NewGRPCServer()
 
 	preFunc := func() error {
 		authProviders, err := parseAuthenticationProviderClients()
 		if err != nil {
-			return err
+			return fmt.Errorf("could not parse authentication providers: %w", err)
 		}
 		imageService, err := docker.NewImageService(authProviders)
+		if err != nil {
+			return fmt.Errorf("could not create docker image service: %w", err)
+		}
 		runtimeapi.RegisterImageServiceServer(grpcServer, imageService)
 		return nil
 	}

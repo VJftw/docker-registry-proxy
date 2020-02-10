@@ -22,14 +22,20 @@ func main() {
 	rootCmd := cmd.New("docker-registry-proxy")
 
 	rootCmd.Flags().String(flagUpstreamRepository, "", "The upstream repository")
-	viper.BindPFlag(flagUpstreamRepository, rootCmd.Flags().Lookup(flagUpstreamRepository))
+	if err := viper.BindPFlag(flagUpstreamRepository, rootCmd.Flags().Lookup(flagUpstreamRepository)); err != nil {
+		cmd.HandleErr(err)
+	}
 
 	rootCmd.Flags().String(flagUpstreamAuthenticationService, "", "The upstream authentication service that returns credentials to pull images from the source repository")
-	viper.BindPFlag(flagUpstreamAuthenticationService, rootCmd.Flags().Lookup(flagUpstreamAuthenticationService))
+	if err := viper.BindPFlag(flagUpstreamAuthenticationService, rootCmd.Flags().Lookup(flagUpstreamAuthenticationService)); err != nil {
+		cmd.HandleErr(err)
+	}
 	// --upstream_authentication="static"
 
 	rootCmd.Flags().StringSlice(flagAuthenticationVerifiers, []string{}, "The authentication verifiers in the format `<username>=<endpoint>`")
-	viper.BindPFlag(flagAuthenticationVerifiers, rootCmd.Flags().Lookup(flagAuthenticationVerifiers))
+	if err := viper.BindPFlag(flagAuthenticationVerifiers, rootCmd.Flags().Lookup(flagAuthenticationVerifiers)); err != nil {
+		cmd.HandleErr(err)
+	}
 	// --authentication_verifier="_gcp:google"
 	// --authentication_verifier="_aws:aws"
 

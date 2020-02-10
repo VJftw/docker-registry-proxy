@@ -7,6 +7,7 @@ import (
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
+	"log"
 	"math/big"
 	"net/http"
 	"net/http/httptest"
@@ -82,10 +83,14 @@ func TestVerify(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		switch r.URL.Path {
 		case "/latest/dynamic/instance-identity/document":
-			w.Write(documentResp)
+			if _, err = w.Write(documentResp); err != nil {
+				log.Fatal(err)
+			}
 			w.WriteHeader(http.StatusOK)
 		case "/latest/dynamic/instance-identity/pkcs7":
-			w.Write(pkcs7Resp)
+			if _, err = w.Write(pkcs7Resp); err != nil {
+				log.Fatal(err)
+			}
 			w.WriteHeader(http.StatusOK)
 		default:
 			w.WriteHeader(http.StatusOK)
@@ -102,7 +107,7 @@ func TestVerify(t *testing.T) {
 		v1.ConfigType_STRING,
 		"_",
 	)
-	verifier.Configure(context.Background(), &v1.ConfigureRequest{
+	_, err = verifier.Configure(context.Background(), &v1.ConfigureRequest{
 		Attributes: map[string]*v1.ConfigurationAttributeValue{
 			"username": &v1.ConfigurationAttributeValue{
 				AttributeType: v1.ConfigType_STRING,
@@ -110,6 +115,7 @@ func TestVerify(t *testing.T) {
 			},
 		},
 	})
+	assert.NoError(t, err)
 
 	instanceIdentityPassword := &aws.InstanceIdentityPassword{
 		Payload:   documentResp,

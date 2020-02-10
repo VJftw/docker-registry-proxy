@@ -80,7 +80,7 @@ func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.Pro
 		return nil, fmt.Errorf("could not read token from body: %w", err)
 	}
 
-	metaReq, err := http.NewRequest("GET", aws.MetadataIdentity(), nil)
+	metaReq, _ := http.NewRequest("GET", aws.MetadataIdentity(), nil)
 	metaReq.Header = aws.GetMetadataHeader(string(token))
 
 	metaResp, err := p.client.Do(metaReq)
@@ -94,7 +94,7 @@ func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.Pro
 		return nil, fmt.Errorf("could not read metadata response: %w", err)
 	}
 
-	sigReq, err := http.NewRequest("GET", aws.MetadataIdentitySignature(), nil)
+	sigReq, _ := http.NewRequest("GET", aws.MetadataIdentitySignature(), nil)
 	sigReq.Header = aws.GetMetadataHeader(string(token))
 
 	sigResp, err := p.client.Do(sigReq)

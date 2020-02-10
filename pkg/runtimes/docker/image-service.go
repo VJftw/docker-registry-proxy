@@ -3,6 +3,7 @@ package docker
 import (
 	"bufio"
 	"context"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -24,9 +25,12 @@ type ImageService struct {
 
 // NewImageService returns a new instance of the Docker Image Service with the given authentication providers
 func NewImageService(authProviders map[string]v1.AuthenticationProviderClient) (*ImageService, error) {
-	client, err := dockerclient.NewEnvClient()
+	client, err := dockerclient.NewClientWithOpts()
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("could not create new docker client: %w", err)
+	}
+	if err := dockerclient.FromEnv(client); err != nil {
+		return nil, fmt.Errorf("could not configure docker client from environment: %w", err)
 	}
 	return &ImageService{
 		client:        client,
