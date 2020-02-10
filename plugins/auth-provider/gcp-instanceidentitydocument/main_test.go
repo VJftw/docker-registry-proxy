@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"log"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -15,7 +16,9 @@ import (
 func TestProvide(t *testing.T) {
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("a"))
+		if _, err := w.Write([]byte("a")); err != nil {
+			log.Fatal(err)
+		}
 	}))
 	defer ts.Close()
 	gcp.MetadataURL = ts.URL
@@ -31,7 +34,7 @@ func TestProvide(t *testing.T) {
 	)
 	assert.NoError(t, err)
 
-	provider.Configure(context.Background(), &v1.ConfigureRequest{
+	_, err = provider.Configure(context.Background(), &v1.ConfigureRequest{
 		Attributes: map[string]*v1.ConfigurationAttributeValue{
 			"username": &v1.ConfigurationAttributeValue{
 				AttributeType: v1.ConfigType_STRING,
@@ -43,6 +46,7 @@ func TestProvide(t *testing.T) {
 			},
 		},
 	})
+	assert.NoError(t, err)
 
 	resp, err := provider.Provide(context.Background(), &v1.ProvideRequest{})
 	assert.NoError(t, err)

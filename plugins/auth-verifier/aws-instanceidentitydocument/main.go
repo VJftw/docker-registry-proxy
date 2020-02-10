@@ -34,18 +34,18 @@ type Verifier struct {
 
 	trustStore *x509.CertPool
 
-	devpayProductCodes      []string
-	marketplaceProductCodes []string
-	availabilityZones       []string
-	privateIPs              []string
-	instanceIDs             []string
-	billingProducts         []string
-	accountIDs              []string
-	imageIDs                []string
-	architectures           []string
-	kernelIDs               []string
-	ramdiskIDs              []string
-	regions                 []string
+	// devpayProductCodes      []string
+	// marketplaceProductCodes []string
+	availabilityZones []string
+	privateIPs        []string
+	instanceIDs       []string
+	// billingProducts         []string
+	accountIDs []string
+	imageIDs   []string
+	// architectures           []string
+	// kernelIDs               []string
+	// ramdiskIDs              []string
+	regions []string
 }
 
 // NewVerifier returns a new Verifier

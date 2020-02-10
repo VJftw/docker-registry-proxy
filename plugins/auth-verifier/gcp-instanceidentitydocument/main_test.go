@@ -70,7 +70,9 @@ func TestVerify(t *testing.T) {
 	serverResp, _ := json.Marshal(map[string]string{"test": string(certBytes)})
 	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusOK)
-		w.Write(serverResp)
+		if _, err := w.Write(serverResp); err != nil {
+			log.Fatal(err)
+		}
 	}))
 	defer ts.Close()
 	gcp.GoogleOAuth2CertsURL = ts.URL

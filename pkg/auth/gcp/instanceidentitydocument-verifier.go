@@ -18,7 +18,6 @@ var (
 	ErrZoneNotWhitelisted          = errors.New("zone not whitelisted")
 	ErrLicenseIDWhitelisted        = errors.New("license id not whitelisted")
 
-	ErrTokenInvalidKeyID  = errors.New("invalid kid in token")
 	ErrTokenClaimsParse   = errors.New("unable to parse claims in token")
 	ErrTokenClaimsExpired = errors.New("token claims expired")
 	ErrTokenMissingKeyID  = errors.New("missing kid in token")
@@ -46,7 +45,7 @@ func GetTokenClaims(tokenStr string, certManager *CertificateManager) (*Claims, 
 		kid := token.Header["kid"].(string)
 		pubKey, err := certManager.GetPublicKeyByKeyID(kid)
 		if err != nil {
-			return nil, fmt.Errorf("%w: %w", err, ErrTokenInvalidKeyID)
+			return nil, fmt.Errorf("invalid kid in token: %w", err)
 		}
 		return pubKey, nil
 	})

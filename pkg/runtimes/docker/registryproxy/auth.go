@@ -138,6 +138,7 @@ func Authenticate(opts *ProxyOpts, res http.ResponseWriter, req *http.Request) {
 		logger.Warn("could not create token", zap.Error(err))
 	}
 	res.WriteHeader(http.StatusOK)
-	json.NewEncoder(res).Encode(&bearerResponse{Token: tokenString})
-	return
+	if err := json.NewEncoder(res).Encode(&bearerResponse{Token: tokenString}); err != nil {
+		logger.Error("could not encode response", zap.Error(err))
+	}
 }

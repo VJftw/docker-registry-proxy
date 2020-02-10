@@ -70,7 +70,9 @@ func New(programName string) *cobra.Command {
 	// viper.BindPFlag(flagConfigPath, rootCmd.Flags().Lookup(flagConfigPath))
 
 	rootCmd.Flags().String(flagNetworkAddress, "tcp://:8080", "the network address to listen on e.g. unix:///var/run/test.sock or tcp://:8080")
-	viper.BindPFlag(flagNetworkAddress, rootCmd.Flags().Lookup(flagNetworkAddress))
+	if err := viper.BindPFlag(flagNetworkAddress, rootCmd.Flags().Lookup(flagNetworkAddress)); err != nil {
+		HandleErr(err)
+	}
 
 	// load plugins and add plugin flags
 	err := plugin.LoadPluginsFromConfigSlice(viper.GetStringSlice("plugins"))
@@ -143,14 +145,18 @@ func Execute(
 			case *grpc.Server:
 				s.GracefulStop()
 			case *http.Server:
-				s.Shutdown(context.Background())
+				if err := s.Shutdown(context.Background()); err != nil {
+					Logger.Error("error shutting down server", zap.Error(err))
+				}
 			}
 			lis.Close()
 			for _, stopable := range Stopables {
 				stopable.Stop()
 			}
 			Logger.Info("stopped")
-			Logger.Sync()
+			if err := Logger.Sync(); err != nil {
+				Logger.Error("error syncing logs", zap.Error(err))
+			}
 		}()
 
 		return server.Serve(lis)
