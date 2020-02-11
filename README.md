@@ -1,6 +1,6 @@
 # Docker Registry Proxy
 
-This project provides a proxy to a Docker Registry with support for arbitrary authentication. We usually desire managed private Docker Registries, such as [Google Container Registry (GCR)](https://cloud.google.com/container-registry), [Amazon Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/), [Private Docker Hub](https://docs.docker.com/docker-hub/repos/#private-repositories), [Quay.io](https://quay.io/), etc., as they are much cheaper to set-up, manage and reliably scale.
+This project provides a proxy to a Docker Registry with support for arbitrary authentication. We desire managed private Docker Registries, such as [Google Container Registry (GCR)](https://cloud.google.com/container-registry), [Amazon Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/), [Private Docker Hub](https://docs.docker.com/docker-hub/repos/#private-repositories), [Quay.io](https://quay.io/), etc., as they are much cheaper to set-up, manage and reliably scale. However, authentication and access control options for these are limited. 
 
 With this in mind, some use-cases of this Docker Registry Proxy are:
 
