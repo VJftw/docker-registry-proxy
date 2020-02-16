@@ -80,6 +80,6 @@ func GetViperAttr(attrType v1.ConfigType, attrName string) interface{} {
 	case v1.ConfigType_BOOL:
 		return viper.GetBool(attrName)
 	}
-	fmt.Println("unsupported type: %s", attrType)
+	fmt.Printf("unsupported type: %s\n", attrType)
 	return nil
 }
