@@ -1,5 +1,5 @@
 resource "google_project_service" "gke_apis" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
   service = "container.googleapis.com"
 
   depends_on = ["google_project_service.gcr_apis"]
@@ -10,7 +10,7 @@ resource "google_project_service" "gke_apis" {
 }
 
 resource "google_container_cluster" "primary" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
 
   name     = "docker-registry-proxy"
   location = "europe-west1"
@@ -32,7 +32,7 @@ resource "google_container_cluster" "primary" {
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
 
   name       = "preemptible-node-pool"
   location   = "europe-west1"

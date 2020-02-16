@@ -26,7 +26,7 @@ func ConfigurePlugins() error {
 			viperAttrName := fmt.Sprintf("%s_%s", alias, attrName)
 			marshalledValue, err := plugin.MarshalConfigurationValue(
 				attrConfig.GetAttributeType(),
-				viper.Get(viperAttrName),
+				GetViperAttr(attrConfig.GetAttributeType(), viperAttrName),
 			)
 			if err != nil {
 				return err
@@ -68,5 +68,18 @@ func LoadPlugins(rootCmd *cobra.Command) error {
 			}
 		}
 	}
+	return nil
+}
+
+func GetViperAttr(attrType v1.ConfigType, attrName string) interface{} {
+	switch attrType {
+	case v1.ConfigType_STRING:
+		return viper.GetString(attrName)
+	case v1.ConfigType_STRING_SLICE:
+		return viper.GetStringSlice(attrName)
+	case v1.ConfigType_BOOL:
+		return viper.GetBool(attrName)
+	}
+	fmt.Println("unsupported type: %s", attrType)
 	return nil
 }

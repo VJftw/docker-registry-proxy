@@ -68,20 +68,20 @@ func (p *Provider) Configure(ctx context.Context, req *v1.ConfigureRequest) (*em
 // Provide returns credentials TODO: cache response from metadata in memory
 func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.ProvideResponse, error) {
 
-	tokenReq, _ := http.NewRequest("PUT", aws.ApiToken(), nil)
-	tokenReq.Header = *aws.TokenHeader
-	tokenResp, err := p.client.Do(tokenReq)
-	if err != nil {
-		return nil, fmt.Errorf("could not execute token request: %w", err)
-	}
+	// tokenReq, _ := http.NewRequest("PUT", aws.ApiToken(), nil)
+	// tokenReq.Header = *aws.TokenHeader
+	// tokenResp, err := p.client.Do(tokenReq)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("could not execute token request: %w", err)
+	// }
 
-	token, err := ioutil.ReadAll(tokenResp.Body)
-	if err != nil {
-		return nil, fmt.Errorf("could not read token from body: %w", err)
-	}
+	// token, err := ioutil.ReadAll(tokenResp.Body)
+	// if err != nil {
+	// 	return nil, fmt.Errorf("could not read token from body: %w", err)
+	// }
 
 	metaReq, _ := http.NewRequest("GET", aws.MetadataIdentity(), nil)
-	metaReq.Header = aws.GetMetadataHeader(string(token))
+	// metaReq.Header = aws.GetMetadataHeader(string(token))
 
 	metaResp, err := p.client.Do(metaReq)
 	if err != nil {
@@ -95,7 +95,7 @@ func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.Pro
 	}
 
 	sigReq, _ := http.NewRequest("GET", aws.MetadataIdentitySignature(), nil)
-	sigReq.Header = aws.GetMetadataHeader(string(token))
+	// sigReq.Header = aws.GetMetadataHeader(string(token))
 
 	sigResp, err := p.client.Do(sigReq)
 	if err != nil {
