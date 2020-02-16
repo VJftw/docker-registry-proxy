@@ -91,6 +91,7 @@ func TestVerify(t *testing.T) {
 		v1.ConfigType_STRING,
 		"_",
 	)
+	assert.NoError(t, err)
 	_, err = verifier.Configure(context.Background(), &v1.ConfigureRequest{
 		Attributes: map[string]*v1.ConfigurationAttributeValue{
 			"username": &v1.ConfigurationAttributeValue{
