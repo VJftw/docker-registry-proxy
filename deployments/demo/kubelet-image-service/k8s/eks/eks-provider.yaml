@@ -24,8 +24,8 @@ spec:
             - name: KIS_PLUGINS
               value: "auth-provider_aws-instanceidentitydocument:awsidd"
             - name: KIS_AWSIDD_USERNAME
-              value: "_gcpidd"
+              value: "_awsidd"
             - name: KIS_AWSIDD_AUDIENCE
-              value: "docker.vjpatel.me"
+              value: "registry.vjpatel.me"
             - name: KIS_AUTHENTICATION_PROVIDER
-              value: docker.vjpatel.me=awsidd
+              value: registry.vjpatel.me=awsidd

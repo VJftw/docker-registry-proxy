@@ -23,7 +23,21 @@ var (
 	ErrTokenMissingKeyID  = errors.New("missing kid in token")
 )
 
-func CheckWhitelist(value string, whitelist []string) bool {
+func CheckStringWhitelist(value string, whitelist []string) bool {
+	if len(whitelist) < 1 {
+		return true
+	}
+
+	for _, i := range whitelist {
+		if value == i {
+			return true
+		}
+	}
+
+	return false
+}
+
+func CheckUint64Whitelist(value uint64, whitelist []uint64) bool {
 	if len(whitelist) < 1 {
 		return true
 	}
@@ -92,6 +106,8 @@ type Claims struct {
 	Subject         string       `json:"sub"`
 	AuthorizedParty string       `json:"azp"`
 	Google          ClaimsGoogle `json:"google"`
+	Email           string       `json:"email"`
+	EmailVerified   bool         `json:"email_verified"`
 }
 
 // ClaimsGoogle represents the Google subclaims
@@ -101,13 +117,13 @@ type ClaimsGoogle struct {
 
 // ClaimsGoogleComputeEngine represents the Google Compute Engine subclaims
 type ClaimsGoogleComputeEngine struct {
-	ProjectID         string   `json:"project_id"`
-	ProjectNumber     string   `json:"project_number"`
-	Zone              string   `json:"zone"`
-	InstanceID        string   `json:"instance_id"`
-	InstanceName      string   `json:"instance_name"`
-	CreationTimestamp string   `json:"instance_creation_timestamp"`
-	LicenseIDs        []string `json:"license_id"`
+	ProjectID         string     `json:"project_id"`
+	ProjectNumber     uint64     `json:"project_number"`
+	Zone              string     `json:"zone"`
+	InstanceID        string     `json:"instance_id"`
+	InstanceName      string     `json:"instance_name"`
+	CreationTimestamp ClaimsTime `json:"instance_creation_timestamp"`
+	LicenseIDs        []string   `json:"license_id"`
 }
 
 // Valid validates that the given claims are valid

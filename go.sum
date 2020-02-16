@@ -384,6 +384,7 @@ k8s.io/code-generator v0.0.0-20191121015212-c4c8f8345c7e/go.mod h1:DVmfPQgxQENqD
 k8s.io/cri-api v0.0.0-20191025232916-446748cffdda h1:HVTA1bXCQek+NF0xTZkryScnkGYWHkoeYAQVEVs73r8=
 k8s.io/cri-api v0.0.0-20191025232916-446748cffdda/go.mod h1:KNTKZoKRKZwrlPbLyVNTukFte0jVhRX0kBjGxhjiqKk=
 k8s.io/cri-api v0.17.2 h1:79i4T9cRV2vpzaNFQfFO5gCl6x8LEgxMJk1amJDYncQ=
+k8s.io/cri-api v0.17.3 h1:jvjVvBqgZq3WcaPq07n0h5h9eCnIaR4dhKyHSoZG8Y8=
 k8s.io/gengo v0.0.0-20190128074634-0689ccc1d7d6/go.mod h1:ezvh/TsK7cY6rbqRK0oQQ8IAqLxYwwyPxAX1Pzy0ii0=
 k8s.io/gengo v0.0.0-20190822140433-26a664648505/go.mod h1:ezvh/TsK7cY6rbqRK0oQQ8IAqLxYwwyPxAX1Pzy0ii0=
 k8s.io/klog v0.0.0-20181102134211-b9b56d5dfc92/go.mod h1:Gq+BEi5rUBO/HRz0bTSXDUcqjScdoY3a9IHpCEIOOfk=

@@ -1,16 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
 	"crypto/x509/pkix"
 	"encoding/pem"
-	"log"
 	"math/big"
-	"net/http"
-	"net/http/httptest"
 	"testing"
 	"time"
 
@@ -68,45 +66,32 @@ func TestVerify(t *testing.T) {
 	assert.NoError(t, err)
 	key := genTestKey()
 	pemCert := getCertificate(key)
+	backupAWSCerts := aws.AWSCertificates
 	aws.AWSCertificates = map[string]string{
 		"TEST": string(pemCert),
 	}
+	defer func() {
+		aws.AWSCertificates = backupAWSCerts
+	}()
 	block, _ := pem.Decode([]byte(pemCert))
 	cert, err := x509.ParseCertificate(block.Bytes)
 	assert.NoError(t, err)
 	err = toBeSigned.AddSigner(cert, key, pkcs7.SignerInfoConfig{})
 	assert.NoError(t, err)
 	toBeSigned.Detach()
-	pkcs7Resp, err := toBeSigned.Finish()
+	signed, err := toBeSigned.Finish()
+	pkcs7Resp := pem.EncodeToMemory(&pem.Block{Type: "PKCS7", Bytes: signed})
+	pkcs7Resp = bytes.ReplaceAll(pkcs7Resp, []byte("-----BEGIN PKCS7-----"), []byte(""))
+	pkcs7Resp = bytes.ReplaceAll(pkcs7Resp, []byte("-----END PKCS7-----"), []byte(""))
+	// assert.Equal(t, 1, string(pkcs7Resp))
 	assert.NoError(t, err)
-
-	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		switch r.URL.Path {
-		case "/latest/dynamic/instance-identity/document":
-			if _, err = w.Write(documentResp); err != nil {
-				log.Fatal(err)
-			}
-			w.WriteHeader(http.StatusOK)
-		case "/latest/dynamic/instance-identity/pkcs7":
-			if _, err = w.Write(pkcs7Resp); err != nil {
-				log.Fatal(err)
-			}
-			w.WriteHeader(http.StatusOK)
-		default:
-			w.WriteHeader(http.StatusOK)
-		}
-		if r.URL.Path == "/latest/api/token" {
-			w.WriteHeader(http.StatusOK)
-			return
-		}
-	}))
-	aws.MetadataURL = ts.URL
 
 	verifier := NewVerifier()
 	marshalledUsername, err := plugin.MarshalConfigurationValue(
 		v1.ConfigType_STRING,
 		"_",
 	)
+	assert.NoError(t, err)
 	_, err = verifier.Configure(context.Background(), &v1.ConfigureRequest{
 		Attributes: map[string]*v1.ConfigurationAttributeValue{
 			"username": &v1.ConfigurationAttributeValue{

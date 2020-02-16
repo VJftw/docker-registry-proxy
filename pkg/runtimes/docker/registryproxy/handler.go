@@ -14,6 +14,8 @@ func ProxyHandler(opts *ProxyOpts) func(http.ResponseWriter, *http.Request) {
 
 	return func(res http.ResponseWriter, req *http.Request) {
 
+		fmt.Printf("recieved request: %#v\n", req)
+
 		if req.URL.Path == "/_/v1/auth" {
 			Authenticate(opts, res, req)
 			return

@@ -1,6 +1,7 @@
 package registryproxy
 
 import (
+	"encoding/base64"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -32,7 +33,7 @@ func (c Claims) Valid() error {
 	return c.StandardClaims.Valid()
 }
 
-var hmacSecret = []byte("CHANGEME")
+var hmacSecret = []byte("CHANGEME") // TODO: make this a parameter
 
 // GetAuthentication returns the authentication for a request
 func GetAuthentication(req *http.Request) *Claims {
@@ -141,4 +142,12 @@ func Authenticate(opts *ProxyOpts, res http.ResponseWriter, req *http.Request) {
 	if err := json.NewEncoder(res).Encode(&bearerResponse{Token: tokenString}); err != nil {
 		logger.Error("could not encode response", zap.Error(err))
 	}
+}
+
+// MakeBasicAuth returns a basic auth string from a ProvideResponse
+func MakeBasicAuth(username string, password string) string {
+
+	basicAuthDecoded := fmt.Sprintf("%s:%s", username, password)
+
+	return base64.StdEncoding.EncodeToString([]byte(basicAuthDecoded))
 }

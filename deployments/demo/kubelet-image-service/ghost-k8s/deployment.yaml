@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: ghost
-          image: docker.vjpatel.me/ghost:latest
+          image: registry.vjpatel.me/ghost:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 2368

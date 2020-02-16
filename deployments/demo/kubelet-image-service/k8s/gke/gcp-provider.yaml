@@ -26,6 +26,6 @@ spec:
             - name: KIS_GCPIDD_USERNAME
               value: "_gcpidd"
             - name: KIS_GCPIDD_AUDIENCE
-              value: "docker.vjpatel.me"
+              value: "registry.vjpatel.me"
             - name: KIS_AUTHENTICATION_PROVIDER
-              value: docker.vjpatel.me=gcpidd
+              value: registry.vjpatel.me=gcpidd

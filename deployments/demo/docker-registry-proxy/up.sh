@@ -3,7 +3,7 @@
 ### SETTINGS
 acme_email="vj@vjpatel.me"
 gcp_billing_account_id="00C32F-55AB5C-78A691"
-domain="docker.vjpatel.me"
+domain="registry.vjpatel.me"
 
 gcloud auth configure-docker --quiet
 

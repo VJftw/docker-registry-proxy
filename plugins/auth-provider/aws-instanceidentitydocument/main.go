@@ -103,14 +103,14 @@ func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.Pro
 	}
 
 	defer sigResp.Body.Close()
-	sigJSONBytes, err := ioutil.ReadAll(sigResp.Body)
+	sigBytes, err := ioutil.ReadAll(sigResp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("could not read metadata response: %w", err)
 	}
 
 	instanceIdentityPassword := &aws.InstanceIdentityPassword{
 		Payload:   metaJSONBytes,
-		Signature: sigJSONBytes,
+		Signature: sigBytes,
 	}
 
 	encodedInstanceIdentityPassword, err := instanceIdentityPassword.Encode()

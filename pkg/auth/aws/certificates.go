@@ -4,11 +4,12 @@ import (
 	"crypto/x509"
 	"encoding/pem"
 	"fmt"
+	"log"
 )
 
-// GetCertPool returns the given certificates as a certificate pool
-func GetCertPool(certs map[string]string) (*x509.CertPool, error) {
-	trustStore := x509.NewCertPool()
+// GetCertificates returns the given certificates as a certificate pool
+func GetCertificates(certs map[string]string) ([]*x509.Certificate, error) {
+	certificates := []*x509.Certificate{}
 
 	for k, cert := range certs {
 		block, _ := pem.Decode([]byte(cert))
@@ -16,10 +17,11 @@ func GetCertPool(certs map[string]string) (*x509.CertPool, error) {
 		if err != nil {
 			return nil, fmt.Errorf("could not parse '%s' certificate: %w", k, err)
 		}
-		trustStore.AddCert(cert)
+		log.Printf("added cert: %s - %s", k, cert.Subject)
+		certificates = append(certificates, cert)
 	}
 
-	return trustStore, nil
+	return certificates, nil
 }
 
 // AWSCertificates represent the certificates in many regions.
