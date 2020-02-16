@@ -31,11 +31,10 @@ type Verifier struct {
 	certificateManager *gcp.CertificateManager
 	wg                 sync.WaitGroup
 
-	audiences      []string
-	projectIDs     []string
-	projectNumbers []string
-	zones          []string
-	licenseIDs     []string
+	audiences  []string
+	projectIDs []string
+	zones      []string
+	licenseIDs []string
 }
 
 // NewVerifier returns a new Verifier
@@ -79,7 +78,6 @@ func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (
 func (v *Verifier) Configure(ctx context.Context, req *v1.ConfigureRequest) (*empty.Empty, error) {
 	v.audiences = plugin.GetStringSliceValue(flagAudiences, req)
 	v.projectIDs = plugin.GetStringSliceValue(flagProjectIDs, req)
-	v.projectNumbers = plugin.GetStringSliceValue(flagProjectNumbers, req)
 	v.zones = plugin.GetStringSliceValue(flagZones, req)
 	v.licenseIDs = plugin.GetStringSliceValue(flagLicenseIDs, req)
 
@@ -93,20 +91,17 @@ func (v *Verifier) Verify(ctx context.Context, req *v1.VerifyRequest) (*empty.Em
 		return nil, err
 	}
 
-	if found := gcp.CheckWhitelist(claims.Audience, v.audiences); !found {
+	if found := gcp.CheckStringWhitelist(claims.Audience, v.audiences); !found {
 		return nil, fmt.Errorf("%s: %w", claims.Audience, gcp.ErrAudienceNotWhitelisted)
 	}
-	if found := gcp.CheckWhitelist(claims.Google.ComputeEngine.ProjectID, v.projectIDs); !found {
+	if found := gcp.CheckStringWhitelist(claims.Google.ComputeEngine.ProjectID, v.projectIDs); !found {
 		return nil, fmt.Errorf("%s: %w", claims.Google.ComputeEngine.ProjectID, gcp.ErrProjectIDNotWhitelisted)
 	}
-	if found := gcp.CheckWhitelist(claims.Google.ComputeEngine.ProjectNumber, v.projectNumbers); !found {
-		return nil, fmt.Errorf("%s: %w", claims.Google.ComputeEngine.ProjectNumber, gcp.ErrProjectNumberNotWhitelisted)
-	}
-	if found := gcp.CheckWhitelist(claims.Google.ComputeEngine.Zone, v.zones); !found {
+	if found := gcp.CheckStringWhitelist(claims.Google.ComputeEngine.Zone, v.zones); !found {
 		return nil, fmt.Errorf("%s: %w", claims.Google.ComputeEngine.Zone, gcp.ErrZoneNotWhitelisted)
 	}
 	for _, licenseID := range claims.Google.ComputeEngine.LicenseIDs {
-		if found := gcp.CheckWhitelist(licenseID, v.licenseIDs); !found {
+		if found := gcp.CheckStringWhitelist(licenseID, v.licenseIDs); !found {
 			return nil, fmt.Errorf("%s: %w", licenseID, gcp.ErrLicenseIDWhitelisted)
 		}
 	}

@@ -3,6 +3,7 @@ package docker
 import (
 	"bufio"
 	"context"
+	"encoding/base64"
 	"fmt"
 	"log"
 	"os"
@@ -94,7 +95,14 @@ func (s *ImageService) PullImage(ctx context.Context, req *runtimeapi.PullImageR
 		if err != nil {
 			return nil, err
 		}
-		imgPullOpts.RegistryAuth = authResp.GetRegistryToken()
+		regAuth := base64.StdEncoding.EncodeToString(
+			[]byte(fmt.Sprintf(
+				`{"username": "%s", "password": "%s"}`,
+				authResp.GetUsername(),
+				authResp.GetPassword(),
+			)),
+		)
+		imgPullOpts.RegistryAuth = regAuth
 	}
 
 	out, err := s.client.ImagePull(ctx, img, imgPullOpts)

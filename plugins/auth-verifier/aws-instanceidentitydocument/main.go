@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/x509"
 	"encoding/json"
+	"encoding/pem"
 	"fmt"
 	"log"
 
@@ -32,7 +33,7 @@ type Verifier struct {
 	v1.AuthenticationVerifierServer
 	v1.ConfigurationServer
 
-	trustStore *x509.CertPool
+	certs []*x509.Certificate
 
 	// devpayProductCodes      []string
 	// marketplaceProductCodes []string
@@ -50,12 +51,12 @@ type Verifier struct {
 
 // NewVerifier returns a new Verifier
 func NewVerifier() *Verifier {
-	certPool, err := aws.GetCertPool(aws.AWSCertificates)
+	certs, err := aws.GetCertificates(aws.AWSCertificates)
 	if err != nil {
 		log.Fatalf("could not get certificate pool: %s", err)
 	}
 	return &Verifier{
-		trustStore: certPool,
+		certs: certs,
 	}
 }
 
@@ -111,18 +112,20 @@ func (v *Verifier) Verify(ctx context.Context, req *v1.VerifyRequest) (*empty.Em
 		return nil, fmt.Errorf("could not decode password: %w", err)
 	}
 
-	p7, err := pkcs7.Parse(instanceIdentityPassword.Signature)
+	instanceIdentityPassword.Signature = []byte(fmt.Sprintf("-----BEGIN PKCS7-----\n%s\n-----END PKCS7-----", instanceIdentityPassword.Signature))
+
+	decodedSig, _ := pem.Decode(instanceIdentityPassword.Signature)
+
+	p7, err := pkcs7.Parse(decodedSig.Bytes)
 	if err != nil {
-		return nil, fmt.Errorf("could not parse PKCS7 signature")
+		return nil, fmt.Errorf("could not parse PKCS7 signature '%s': %w", instanceIdentityPassword.Signature, err)
 	}
 
 	p7.Content = instanceIdentityPassword.Payload
 
-	for _, bs := range v.trustStore.Subjects() {
-		fmt.Printf("%s\n", bs)
-	}
+	p7.Certificates = v.certs
 
-	if err := p7.VerifyWithChain(v.trustStore); err != nil {
+	if err := p7.Verify(); err != nil {
 		return nil, fmt.Errorf("could not verify signed data: %w", err)
 	}
 

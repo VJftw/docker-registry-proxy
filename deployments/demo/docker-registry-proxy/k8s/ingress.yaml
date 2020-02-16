@@ -8,7 +8,7 @@ metadata:
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
-    - host: docker.vjpatel.me
+    - host: registry.vjpatel.me
       http:
         paths:
           - backend:
@@ -17,5 +17,5 @@ spec:
             path: /
   tls: # < placing a host in the TLS config will indicate a certificate should be created
     - hosts:
-        - docker.vjpatel.me
-      secretName: cert-docker-vjpatel-me # < cert-manager will store the created certificate in this secret.
+        - registry.vjpatel.me
+      secretName: cert-registry-vjpatel-me # < cert-manager will store the created certificate in this secret.
