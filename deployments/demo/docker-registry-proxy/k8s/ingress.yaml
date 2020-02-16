@@ -1,11 +1,11 @@
-apiVersion: extensions/v1beta1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
   name: docker-registry-proxy
   namespace: docker-registry-proxy
   annotations:
     # add an annotation indicating the issuer to use.
-    cert-manager.io/cluster-issuer: letsencrypt
+    cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   rules:
     - host: docker.vjpatel.me

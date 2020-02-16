@@ -1,15 +1,15 @@
 ---
 bases:
-  - ../../../kubelet-image-service/k8s/base
+  - ../../../../kubelet-image-service/k8s/base
 
 namespace: kube-system
 resources:
   - kubelet-patch.daemonset.yaml
 
 configMapGenerator:
-  - name: kubelet-config
+  - name: kubelet-systemd-cfg
     files:
-      - kubelet.conf
+      - kubelet.service
 
 patches:
   - gcp-provider.yaml

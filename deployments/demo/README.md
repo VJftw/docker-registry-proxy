@@ -18,6 +18,6 @@ See `up.sh`.
 
 This is how to configure your Kubernetes workers to authenticate and pull images from the Docker Registry Proxy.
 
-This component creates a GCP Project `demo-kubelet-image-service-*` to demonstrate a simple deployment of the Kubelet Image Service and updating of Kubelet flags on Google Kubernetes Engine (GKE). There is also a `ghost-k8s` directory to deploy a Ghost CMS that references the Docker Registry Proxy.
+This component creates GKE and EKS clusters to demonstrate a simple deployment of the Kubelet Image Service and updating of Kubelet flags on Google Kubernetes Engine (GKE). There is also a `ghost-k8s` directory to deploy a Ghost CMS that references the Docker Registry Proxy.
 
 See `up.sh`.

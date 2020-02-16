@@ -1,6 +1,6 @@
 # Docker Registry Proxy
 
-This project provides a proxy to a Docker Registry with support for arbitrary authentication. We desire managed private Docker Registries, such as [Google Container Registry (GCR)](https://cloud.google.com/container-registry), [Amazon Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/), [Private Docker Hub](https://docs.docker.com/docker-hub/repos/#private-repositories), [Quay.io](https://quay.io/), etc., as they are much cheaper to set-up, manage and reliably scale. However, authentication and access control options for these are limited. 
+This project provides a proxy to a Docker Registry with support for arbitrary authentication. We desire managed private Docker Registries, such as [Google Container Registry (GCR)](https://cloud.google.com/container-registry), [Amazon Elastic Container Registry (ECR)](https://aws.amazon.com/ecr/), [Private Docker Hub](https://docs.docker.com/docker-hub/repos/#private-repositories), [Quay.io](https://quay.io/), etc., as they are much cheaper to set-up, manage and reliably scale. However, authentication and access control options for these are limited.
 
 With this in mind, some use-cases of this Docker Registry Proxy are:
 
@@ -18,9 +18,5 @@ This is deployed in a container via a `DaemonSet`, thus requires access to the `
 ### Managed Kubernetes
 In most managed kubernetes offerings, it is difficult to modify the `kubelet` flags. The GKE documentation [recommends making host image modifications via a DaemonSet](https://cloud.google.com/kubernetes-engine/docs/concepts/node-images#modifications). This section lists the `DaemonSet` workarounds used for each Cloud Service Provider (CSP).
 
-#### Google Kubernetes Engine (GKE)
-The DaemonSet updates `/etc/default/kubelet` on the host (using `hostPath` mounts) and then kills the `kubelet` process on the host (via `hostPID: true`) which is then restarted by the host SystemD with the new kubelet flags.
-
-#### Amazon Elastic Kubernetes Engine (EKS)
-
-TODO
+#### Google Kubernetes Engine (GKE) and Amazon Elastic Kubernetes Engine (EKS)
+The DaemonSet updates `/etc/systemd/system/kubelet.service` on the host (using `hostPath` mounts) and then restarts `kubelet` via `systemd` (using `hostPath` mounts to `/run/systemd`).

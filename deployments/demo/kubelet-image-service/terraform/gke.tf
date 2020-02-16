@@ -1,5 +1,15 @@
+resource "random_id" "project_id" {
+  byte_length = 4
+}
+
+resource "google_project" "my_project" {
+  name            = "test-kis"
+  project_id      = "test-kis-${random_id.project_id.hex}"
+  billing_account = var.billing_account_id
+}
+
 resource "google_project_service" "gke_apis" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
   service = "container.googleapis.com"
 
   provisioner "local-exec" {
@@ -8,7 +18,7 @@ resource "google_project_service" "gke_apis" {
 }
 
 resource "google_container_cluster" "primary" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
 
   name     = "kubelet-image-service"
   location = "europe-west1"
@@ -30,7 +40,7 @@ resource "google_container_cluster" "primary" {
 }
 
 resource "google_container_node_pool" "primary_preemptible_nodes" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
 
   name       = "preemptible-node-pool"
   location   = "europe-west1"

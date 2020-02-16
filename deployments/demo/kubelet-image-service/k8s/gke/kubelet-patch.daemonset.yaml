@@ -1,0 +1,62 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubelet-flag-patch
+  namespace: kube-system
+  labels:
+    k8s-app: kubelet-flag-patch
+spec:
+  selector:
+    matchLabels:
+      name: kubelet-flag-patch
+  template:
+    metadata:
+      labels:
+        name: kubelet-flag-patch
+    spec:
+      # tolerations:
+      # - key: node-role.kubernetes.io/master
+      #   effect: NoSchedule
+      containers:
+        - name: kubelet-flag-patch
+          image: centos/systemd
+          command: ["bash", "-c"]
+          args:
+            - echo "wait for kubelet image service sock";
+              while [ ! -S /var/run/kubelet/kubelet-image-service.sock ]; do sleep 1; done;
+              cat /etc/systemd/system/kubelet.service > /etc/systemd/system/kubelet.service.bak;
+              cat /new/kubelet.service > /etc/systemd/system/kubelet.service;
+              echo "reloading systemd and restarting kubelet";
+              systemctl daemon-reload && systemctl restart kubelet;
+              echo "sleeping forever";
+              while true; do sleep 60; done;
+          resources:
+            limits:
+              memory: 16Mi
+            requests:
+              cpu: 16m
+              memory: 8Mi
+          volumeMounts:
+            - name: kubelet-image-sock
+              mountPath: /var/run/kubelet/
+            - name: systemd
+              mountPath: /run/systemd
+            - name: new-kubelet-systemd-cfg
+              mountPath: /new
+            - name: kubelet-systemd-cfg
+              mountPath: /etc/systemd/system/kubelet.service
+      terminationGracePeriodSeconds: 30
+      volumes:
+        - name: kubelet-image-sock
+          hostPath:
+            path: /var/run/kubelet/
+        - name: systemd
+          hostPath:
+            path: /run/systemd
+        - name: new-kubelet-systemd-cfg
+          configMap:
+            name: kubelet-systemd-cfg
+        - name: kubelet-systemd-cfg
+          hostPath:
+            path: /etc/systemd/system/kubelet.service

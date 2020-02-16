@@ -18,24 +18,19 @@ spec:
       # tolerations:
       # - key: node-role.kubernetes.io/master
       #   effect: NoSchedule
-      hostPID: true
       containers:
         - name: kubelet-flag-patch
-          image: ubuntu:latest
-          command: ["/bin/bash", "-c"]
+          image: centos/systemd
+          command: ["bash", "-c"]
           args:
             - echo "wait for kubelet image service sock";
               while [ ! -S /var/run/kubelet/kubelet-image-service.sock ]; do sleep 1; done;
-              echo "original kubelet config";
-              cat /etc/default/kubelet;
-              cat /new/kubelet.conf > /etc/default/kubelet;
-              echo "new kubelet config";
-              cat /etc/default/kubelet;
-              echo "killing kubelet process to be restarted by host";
-              ps -eF | grep bin/kubelet | head -n1 | tr -s " " | cut -f2 -d" " | xargs kill -9;
-              sleep 999999999999999999999999999999999999
-          securityContext:
-            privileged: true
+              cat /etc/systemd/system/kubelet.service > /etc/systemd/system/kubelet.service.bak;
+              cat /new/kubelet.service > /etc/systemd/system/kubelet.service;
+              echo "reloading systemd and restarting kubelet";
+              systemctl daemon-reload && systemctl restart kubelet;
+              echo "sleeping forever";
+              while true; do sleep 60; done;
           resources:
             limits:
               memory: 16Mi
@@ -43,20 +38,25 @@ spec:
               cpu: 16m
               memory: 8Mi
           volumeMounts:
-            - name: kubelet-config
-              mountPath: /etc/default/kubelet
-            - name: new-kubelet-config
-              mountPath: /new
             - name: kubelet-image-sock
               mountPath: /var/run/kubelet/
+            - name: systemd
+              mountPath: /run/systemd
+            - name: new-kubelet-systemd-cfg
+              mountPath: /new
+            - name: kubelet-systemd-cfg
+              mountPath: /etc/systemd/system/kubelet.service
       terminationGracePeriodSeconds: 30
       volumes:
-        - name: new-kubelet-config
-          configMap:
-            name: kubelet-config
-        - name: kubelet-config
-          hostPath:
-            path: /etc/default/kubelet
         - name: kubelet-image-sock
           hostPath:
             path: /var/run/kubelet/
+        - name: systemd
+          hostPath:
+            path: /run/systemd
+        - name: new-kubelet-systemd-cfg
+          configMap:
+            name: kubelet-systemd-cfg
+        - name: kubelet-systemd-cfg
+          hostPath:
+            path: /etc/systemd/system/kubelet.service

@@ -7,7 +7,7 @@ resources:
   - ingress.yaml
 
 patches:
-  - gcp-provider.yaml
+  - gcr.yaml
 
 secretGenerator:
   - name: gcp-sa

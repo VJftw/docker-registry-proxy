@@ -1,6 +1,6 @@
 
 resource "google_project_service" "gcr_apis" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
   service = "containerregistry.googleapis.com"
 
   provisioner "local-exec" {
@@ -9,7 +9,7 @@ resource "google_project_service" "gcr_apis" {
 }
 
 resource "google_service_account" "service_account" {
-  project = "${google_project.my_project.project_id}"
+  project = google_project.my_project.project_id
 
   account_id   = "docker-registry-proxy"
   display_name = "Docker Registry Proxy"
