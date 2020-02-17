@@ -6,7 +6,7 @@ FROM scratch
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
 
 COPY dist/docker-registry-proxy /bin/
-COPY dist/plugins /plugins
+COPY dist/plugin* /plugins/
 VOLUME /tmp
 
 ENTRYPOINT [ "/bin/docker-registry-proxy" ]
