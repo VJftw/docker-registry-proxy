@@ -24,6 +24,8 @@ jobs:
         run: scripts/build.sh
 
       - name: Publish GitHub release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: scripts/publish-prerelease.sh
 
       - name: Publish Docker Hub images
