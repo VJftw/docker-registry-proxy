@@ -38,7 +38,8 @@ Kubelet performs authentication via this package (there are sibling packages for
 
 #### Proof by using `docker login`
 ```
-meetthevj@gke-test-default-pool-e36d59bc-86n7 ~ $ curl -H "Metadata-Flavor: Google" http://metadata.google.internal./computeMetadata/v1/instance/service-accounts/default/token
+meetthevj@gke-test-default-pool-e36d59bc-86n7 ~ $ curl -H "Metadata-Flavor: Google" 
+\ http://metadata.google.internal./computeMetadata/v1/instance/service-accounts/default/token
 {"access_token":"xxxxxx","expires_in":2895,"token_type":"Bearer"}
 
 meetthevj@gke-test-default-pool-e36d59bc-86n7 ~ $ docker login eu.gcr.io
