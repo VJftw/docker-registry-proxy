@@ -8,6 +8,9 @@
 
 ## Kubelet Image Service (Parallel)
 
+**Pre-setup**:
+ - Update Docker Registry Proxy Deployment to use Instance Identity Document authentication through a separate `terraform.tfvars` and re-applying.
+
 ### AWS EKS
 $0.10/hour + nodes
 

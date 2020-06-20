@@ -4,5 +4,5 @@ provider "aws" {
 }
 
 data "aws_route53_zone" "main" {
-  name = "vjpatel.me."
+  name = "${var.base_domain}."
 }

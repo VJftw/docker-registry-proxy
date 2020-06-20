@@ -41,7 +41,7 @@ resource "kubernetes_deployment" "dockerregistryproxy" {
         container {
           name = "docker-registry-proxy"
 
-          image             = "vjftw/docker-registry-proxy:latest"
+          image             = var.docker_registry_proxy_image
           args              = ["--network_address=tcp://:8888"]
           image_pull_policy = "Always"
 
@@ -69,18 +69,18 @@ resource "kubernetes_deployment" "dockerregistryproxy" {
             name  = "DRP_UPSTREAM_STATIC_PASSWORD"
             value = data.aws_ecr_authorization_token.test.password
           }
-          # env {
-          #   name  = "DRP_AUTHENTICATION_VERIFIER"
-          #   value = "_gcpidd:gcpverifier _awsidd:awsverifier"
-          # }
-          # env {
-          #   name  = "DRP_GCPVERIFIER_PROJECT_IDS"
-          #   value = ""
-          # }
-          # env {
-          #   name  = "DRP_AWSVERIFIER_ACCOUNT_IDS"
-          #   value = ""
-          # }
+          env {
+            name  = "DRP_AUTHENTICATION_VERIFIER"
+            value = var.docker_registry_proxy_authentication_verifier
+          }
+          env {
+            name  = "DRP_GCPVERIFIER_PROJECT_IDS"
+            value = var.docker_registry_proxy_gcpverifier_project_ids
+          }
+          env {
+            name  = "DRP_AWSVERIFIER_ACCOUNT_IDS"
+            value = var.docker_registry_proxy_awsverifier_account_ids
+          }
 
           resources {
             limits {
@@ -98,17 +98,6 @@ resource "kubernetes_deployment" "dockerregistryproxy" {
   }
 }
 
-resource "kubernetes_config_map" "dockerregistryproxy" {
-  metadata {
-    name = "docker-registry-proxy"
-    namespace = kubernetes_namespace.dockerregistryproxy.metadata.0.name
-  }
-
-  data = {
-
-  }
-}
-
 resource "kubernetes_service" "dockerregistryproxy" {
   metadata {
     name = "docker-registry-proxy"
@@ -123,7 +112,6 @@ resource "kubernetes_service" "dockerregistryproxy" {
     selector = {
       app = kubernetes_deployment.dockerregistryproxy.spec.0.template.0.metadata.0.labels.app
     }
-    # session_affinity = "ClientIP"
 
     port {
       name        = "https"
@@ -137,15 +125,15 @@ resource "kubernetes_service" "dockerregistryproxy" {
 
 module "acm_request_certificate" {
   source                            = "git::https://github.com/cloudposse/terraform-aws-acm-request-certificate.git?ref=0.4.0"
-  domain_name                       = "e2e.test.dockerregistryproxy.vjpatel.me"
-  zone_name = "vjpatel.me"
+  domain_name                       = "e2e.test.dockerregistryproxy.${var.base_domain}"
+  zone_name = "${var.base_domain}"
   process_domain_validation_options = true
   ttl                               = "300"
 }
 
 resource "aws_route53_record" "dockerregistryproxy" {
   zone_id = data.aws_route53_zone.main.zone_id
-  name    = "e2e.test.dockerregistryproxy.vjpatel.me"
+  name    = "e2e.test.dockerregistryproxy.${var.base_domain}"
   type    = "CNAME"
   ttl     = "300"
   records = [kubernetes_service.dockerregistryproxy.load_balancer_ingress.0.hostname]
