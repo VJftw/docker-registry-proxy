@@ -30,10 +30,6 @@ resource "google_project" "test_project" {
 resource "google_project_service" "gke_apis" {
   project = google_project.test_project.project_id
   service = "container.googleapis.com"
-
-#   provisioner "local-exec" {
-#     command = "sleep 60;"
-#   }
 }
 
 resource "google_container_cluster" "primary" {
@@ -60,26 +56,3 @@ resource "google_container_cluster" "primary" {
     }
   }
 }
-
-# resource "google_container_node_pool" "primary_preemptible_nodes" {
-#   project = google_project.test_project.project_id
-
-#   name       = module.base_label.id
-#   location   = local.region
-#   cluster    = google_container_cluster.primary.name
-#   node_count = 1
-
-#   node_config {
-#     preemptible  = true
-#     machine_type = local.node_instance_type
-
-#     metadata = {
-#       disable-legacy-endpoints = "true"
-#     }
-
-#     oauth_scopes = [
-#       "https://www.googleapis.com/auth/logging.write",
-#       "https://www.googleapis.com/auth/monitoring",
-#     ]
-#   }
-# }
