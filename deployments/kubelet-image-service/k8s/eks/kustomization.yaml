@@ -1,0 +1,15 @@
+---
+bases:
+  - ../base
+
+namespace: kube-system
+resources:
+  - kubelet-patch.daemonset.yaml
+
+configMapGenerator:
+  - name: kubelet-systemd-cfg
+    files:
+      - kubelet.service
+
+patches:
+  - eks-provider.yaml

@@ -1,0 +1,31 @@
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: kubelet-image-service
+  labels:
+    k8s-app: kubelet-image-service
+spec:
+  selector:
+    matchLabels:
+      name: kubelet-image-service
+  template:
+    metadata:
+      labels:
+        name: kubelet-image-service
+spec:
+  template:
+    spec:
+      containers:
+        - name: kubelet-image-service
+          env:
+            - name: DOCKER_API_VERSION
+              value: "1.38"
+            - name: KIS_PLUGINS
+              value: "auth-provider_aws-instanceidentitydocument:awsidd"
+            - name: KIS_AWSIDD_USERNAME
+              value: "_awsidd"
+            - name: KIS_AWSIDD_AUDIENCE
+              value: "CHANGEME"
+            - name: KIS_AUTHENTICATION_PROVIDER
+              value: CHANGEME=awsidd
