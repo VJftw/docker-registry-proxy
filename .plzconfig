@@ -1,0 +1,3 @@
+[go]
+ImportPath = github.com/VJftw/docker-registry-proxy
+GoTool = //third_party/lang:go
