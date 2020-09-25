@@ -1,3 +1,5 @@
+package(default_visibility = ["PUBLIC"])
+
 GO_VERSION = "1.15.2"
 
 remote_file(
@@ -23,11 +25,12 @@ absolute_go_root="${absolute_repo_path}${go_root}"
 absolute_go_bin="${absolute_go_root}/bin/go"
 
 cat <<EOF >> $OUTS
+#!/bin/bash
+set -Eeuxo pipefail
 export GOROOT="${absolute_go_root}"
-${absolute_go_bin} \\\$@
+${absolute_go_bin} "\\\$@"
 EOF
     """,
     outs = ["go.sh"],
     binary = True,
-    visibility = ["PUBLIC"],
 )
