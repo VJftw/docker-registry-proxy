@@ -11,5 +11,6 @@ go_library(
         "//api/proto:v1",
         "//third_party/go:hashicorp_plugin",
         "//third_party/go:grpc",
-    ]
+    ],
+    visibility = ["PUBLIC"],
 )
