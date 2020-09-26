@@ -12,7 +12,7 @@ go_get(
         "jsonpb",
     ],
     revision = "v1.3.5",
-    licences = ["BSD-3-CLAUSE"],
+    licences = ["BSD-3-Clause"],
 )
 
 go_get(
@@ -21,7 +21,7 @@ go_get(
     get = [],
     install = ["github.com/golang/protobuf/protoc-gen-go"],
     deps = [":protobuf"],
-    licences = ["BSD-3-CLAUSE"],
+    licences = ["BSD-3-Clause"],
 )
 
 go_get(
@@ -132,4 +132,47 @@ go_get(
     get = "github.com/oklog/run",
     revision = "v1.1.0",
     licences = ["Apache-2.0"],
+)
+
+go_get(
+    name = "uber_zap",
+    get = "go.uber.org/zap",
+    revision = "v1.16.0",
+    deps = [":uber_atomic", ":uber_multierr"],
+)
+
+go_get(
+    name = "uber_atomic",
+    get = "go.uber.org/atomic",
+    revision = "v1.7.0",
+)
+
+go_get(
+    name = "uber_multierr",
+    get = "go.uber.org/multierr",
+    revision = "v1.6.0",
+    deps = [":uber_atomic"],
+)
+
+go_get(
+    name = "spf13_cobra",
+    get = "github.com/spf13/cobra",
+    revision = "v1.0.0",
+    licences = ["Apache-2.0"],
+    deps = [":spf13_pflag"],
+)
+
+go_get(
+    name = "spf13_pflag",
+    get = "github.com/spf13/pflag",
+    revision = "v1.0.5",
+    licences = ["BSD-3-Clause"],
+)
+
+go_get(
+    name = "spf13_viper",
+    get = "github.com/spf13/viper",
+    revision = "v1.7.1",
+    licences = ["MIT"],
+    deps = [":spf13_pflag"],
 )
