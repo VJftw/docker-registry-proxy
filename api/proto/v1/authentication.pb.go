@@ -1,0 +1,1 @@
+/home/vjftw/Projects/VJftw/docker-registry-proxy/plz-out/gen/api/proto/v1/authentication.pb.go

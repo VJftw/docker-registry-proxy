@@ -1,36 +1,17 @@
 package(default_visibility = ["PUBLIC"])
-
-GO_VERSION = "1.15.2"
-
-remote_file(
-    name = "go_download",
-    url = "https://golang.org/dl/go%s.linux-amd64.tar.gz" % GO_VERSION,
-    hashes = ["b49fda1ca29a1946d6bb2a5a6982cf07ccd2aba849289508ee0f9918f6bb4552"],
+subinclude(
+    "//third_party/defs:go_tool",
+    "//third_party/defs:protoc",
 )
 
-genrule(
-    name = "goroot",
-    srcs = [":go_download"],
-    cmd = "tar -xzf $SRCS",
-    outs = ["go/"],
+go_tool(
+    name="go",
+    version = "1.15.2",
+    hashes = ["b49fda1ca29a1946d6bb2a5a6982cf07ccd2aba849289508ee0f9918f6bb4552"]
 )
 
-genrule(
-    name = "go",
-    srcs = [":goroot"],
-    cmd = """
-absolute_repo_path=$(pwd | sed 's#plz-out/.*##g')
-go_root=$(out_location :goroot)
-absolute_go_root="${absolute_repo_path}${go_root}"
-absolute_go_bin="${absolute_go_root}/bin/go"
-
-cat <<EOF >> $OUTS
-#!/bin/bash
-set -Eeuxo pipefail
-export GOROOT="${absolute_go_root}"
-${absolute_go_bin} "\\\$@"
-EOF
-    """,
-    outs = ["go.sh"],
-    binary = True,
+protoc_binary(
+    name = "protoc",
+    version = "3.13.0",
+    hashes  = ["4a3b26d1ebb9c1d23e933694a6669295f6a39ddc64c3db2adf671f0a6026f82e"]
 )
