@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/runtimes/docker"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"

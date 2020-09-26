@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/google/go-containerregistry/pkg/authn"
 	"go.uber.org/zap"
 )
