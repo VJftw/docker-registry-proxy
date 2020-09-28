@@ -24,3 +24,9 @@ jobs:
 
       - name: Test
         run: go test -count 5 -cover ./...
+
+      - name: Please build
+        run: ./pleasew build
+      
+      - name: Please test
+        run: ./pleasew test
