@@ -9,7 +9,7 @@ import (
 	"log"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/golang/protobuf/ptypes/empty"
 	"go.mozilla.org/pkcs7"

@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/golang/protobuf/ptypes/empty"
 )
