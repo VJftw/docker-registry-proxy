@@ -1,0 +1,50 @@
+syntax = "proto3";
+package vjftw.dockerregistryproxy.v1;
+
+option go_package = "v1";
+
+import "google/protobuf/empty.proto";
+
+
+service Configuration {
+    // GetConfigurationSchema returns the schema for the plugin
+    rpc GetConfigurationSchema(google.protobuf.Empty)
+        returns (ConfigurationSchema);
+    // Configure configures the plugin
+    rpc Configure(ConfigureRequest) returns (google.protobuf.Empty);
+  }
+  
+  // ConfigurationSchema represents the configuration for a plugin.
+message ConfigurationSchema {
+    // key is attribute name
+    map<string, ConfigurationAttribute> attributes = 1;
+  }
+  
+  // ConfigType represents the available field types from:
+  // https://github.com/spf13/viper#getting-values-from-viper
+  enum ConfigType {
+    BOOL = 0;
+    FLOAT64 = 1;
+    INT = 2;
+    INT_SLICE = 3;
+    STRING = 4;
+    STRING_MAP = 5;
+    STRING_SLICE = 6;
+    TIME = 7;
+    DURATION = 8;
+  }
+  
+  message ConfigurationAttribute {
+    ConfigType attribute_type = 1;
+    string description = 2;
+  }
+  
+  message ConfigurationAttributeValue {
+    ConfigType attribute_type = 1;
+    bytes value = 2;
+  }
+  
+  message ConfigureRequest {
+    map<string, ConfigurationAttributeValue> attributes = 1;
+  }
+  

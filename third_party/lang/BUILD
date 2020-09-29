@@ -15,3 +15,17 @@ protoc_binary(
     version = "3.13.0",
     hashes  = ["4a3b26d1ebb9c1d23e933694a6669295f6a39ddc64c3db2adf671f0a6026f82e"]
 )
+
+remote_file(
+    name = "prototool_download",
+    url = "https://github.com/uber/prototool/releases/download/v1.10.0/prototool-Linux-x86_64.tar.gz",
+    hashes = [],
+)
+
+genrule(
+    name="prototool",
+    srcs = [":prototool_download"],
+    cmd = ["tar -xzf $SRCS"],
+    outs = ["prototool/bin/prototool"],
+    binary = True,
+)
