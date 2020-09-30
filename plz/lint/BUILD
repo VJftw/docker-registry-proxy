@@ -11,3 +11,15 @@ sh_cmd(
     """,
     data = ["//third_party/lang:prototool"],
 )
+
+sh_cmd(
+    name = "go",
+    cmd = """
+    set -e
+    set -x;
+    dirs="$(plz query alltargets --include=go | grep -v third_party | cut -f1 -d":" | cut -c 3- | xargs)"
+    $(out_location //third_party/lang:golang_ci_lint) run -v \\\$dirs
+    set +x;
+    """,
+    data = ["//third_party/lang:golang_ci_lint"],
+)

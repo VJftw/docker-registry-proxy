@@ -1,4 +1,4 @@
-go_lib(
+go_library(
     name = "plugin",
     srcs = [
         "auth-provider.go",
