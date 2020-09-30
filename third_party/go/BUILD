@@ -1,5 +1,17 @@
 package(default_visibility = ["PUBLIC"])
 
+sh_cmd(
+    name="lint",
+    cmd="""
+set -x
+dir=\\\$(dirname $(out_location //third_party/lang:go))
+cp $(out_location //third_party/lang:go) "\\\${dir}/go" 
+export PATH="$PATH:\\\${dir}"
+plz run //third_party/lang:go_lint -- run pkg/... cmd/...
+    """,
+    data=["//third_party/lang:go"],
+)
+
 go_get(
     name = "protobuf",
     get = "github.com/golang/protobuf",

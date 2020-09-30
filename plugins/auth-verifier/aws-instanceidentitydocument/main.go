@@ -9,7 +9,7 @@ import (
 	"log"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/golang/protobuf/ptypes/empty"
 	"go.mozilla.org/pkcs7"
@@ -30,8 +30,8 @@ func main() {
 
 // Verifier represents an AuthenticationVerifier
 type Verifier struct {
-	v1.AuthenticationVerifierServer
-	v1.ConfigurationServer
+	dockerregistryproxyv1.AuthenticationVerifierServer
+	dockerregistryproxyv1.ConfigurationServer
 
 	certs []*x509.Certificate
 
@@ -61,31 +61,31 @@ func NewVerifier() *Verifier {
 }
 
 // GetConfigurationSchema returns the schema for the plugin
-func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*v1.ConfigurationSchema, error) {
-	return &v1.ConfigurationSchema{
-		Attributes: map[string]*v1.ConfigurationAttribute{
-			flagAvailabilityZones: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.ConfigurationSchema, error) {
+	return &dockerregistryproxyv1.ConfigurationSchema{
+		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
+			flagAvailabilityZones: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the availability zones to accept",
 			},
-			flagPrivateIPs: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagPrivateIPs: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the private IPs to accept",
 			},
-			flagInstanceIDs: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagInstanceIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the instance IDs to accept",
 			},
-			flagAccountIDs: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagAccountIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the account IDs to accept",
 			},
-			flagImageIDs: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagImageIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the image IDs to accept",
 			},
-			flagRegions: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagRegions: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the regions to accept",
 			},
 		},
@@ -93,7 +93,7 @@ func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (
 }
 
 // Configure configures the plugin
-func (v *Verifier) Configure(ctx context.Context, req *v1.ConfigureRequest) (*empty.Empty, error) {
+func (v *Verifier) Configure(ctx context.Context, req *dockerregistryproxyv1.ConfigureRequest) (*empty.Empty, error) {
 	v.availabilityZones = plugin.GetStringSliceValue(flagAvailabilityZones, req)
 	v.privateIPs = plugin.GetStringSliceValue(flagPrivateIPs, req)
 	v.instanceIDs = plugin.GetStringSliceValue(flagInstanceIDs, req)
@@ -105,7 +105,7 @@ func (v *Verifier) Configure(ctx context.Context, req *v1.ConfigureRequest) (*em
 }
 
 // Verify checks the given credentials
-func (v *Verifier) Verify(ctx context.Context, req *v1.VerifyRequest) (*empty.Empty, error) {
+func (v *Verifier) Verify(ctx context.Context, req *dockerregistryproxyv1.VerifyRequest) (*empty.Empty, error) {
 	encodedPassword := req.GetPassword()
 	instanceIdentityPassword := &aws.InstanceIdentityPassword{}
 	if err := instanceIdentityPassword.Decode(encodedPassword); err != nil {

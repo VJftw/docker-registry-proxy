@@ -6,42 +6,42 @@ import (
 	"fmt"
 	"log"
 
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/hashicorp/go-plugin"
 	"google.golang.org/grpc"
 )
 
 type ConfigurationGRPCPlugin struct {
 	plugin.Plugin
-	Impl v1.ConfigurationServer
+	Impl dockerregistryproxyv1.ConfigurationServer
 }
 
 func (p *ConfigurationGRPCPlugin) GRPCServer(broker *plugin.GRPCBroker, s *grpc.Server) error {
-	v1.RegisterConfigurationServer(s, p.Impl)
+	dockerregistryproxyv1.RegisterConfigurationServer(s, p.Impl)
 	return nil
 }
 
 func (p *ConfigurationGRPCPlugin) GRPCClient(ctx context.Context, broker *plugin.GRPCBroker, c *grpc.ClientConn) (interface{}, error) {
-	return v1.NewConfigurationClient(c), nil
+	return dockerregistryproxyv1.NewConfigurationClient(c), nil
 }
 
-func MarshalConfigurationValue(t v1.ConfigType, value interface{}) ([]byte, error) {
+func MarshalConfigurationValue(t dockerregistryproxyv1.ConfigType, value interface{}) ([]byte, error) {
 	switch t {
-	case v1.ConfigType_STRING:
+	case dockerregistryproxyv1.ConfigType_STRING:
 		return json.Marshal(value.(string))
-	case v1.ConfigType_STRING_SLICE:
+	case dockerregistryproxyv1.ConfigType_STRING_SLICE:
 		return json.Marshal(value.([]string))
 	}
 	return nil, fmt.Errorf("unsupported type")
 }
 
-func UnmarshalConfigurationValue(t v1.ConfigType, value []byte) (interface{}, error) {
+func UnmarshalConfigurationValue(t dockerregistryproxyv1.ConfigType, value []byte) (interface{}, error) {
 	switch t {
-	case v1.ConfigType_STRING:
+	case dockerregistryproxyv1.ConfigType_STRING:
 		var res string
 		err := json.Unmarshal(value, &res)
 		return res, err
-	case v1.ConfigType_STRING_SLICE:
+	case dockerregistryproxyv1.ConfigType_STRING_SLICE:
 		var res []string
 		err := json.Unmarshal(value, &res)
 		return res, err
@@ -49,7 +49,7 @@ func UnmarshalConfigurationValue(t v1.ConfigType, value []byte) (interface{}, er
 	return nil, fmt.Errorf("unsupported type")
 }
 
-func GetStringSliceValue(flag string, req *v1.ConfigureRequest) []string {
+func GetStringSliceValue(flag string, req *dockerregistryproxyv1.ConfigureRequest) []string {
 	if v, ok := req.Attributes[flag]; ok {
 		val, err := UnmarshalConfigurationValue(v.GetAttributeType(), v.GetValue())
 		if err != nil {

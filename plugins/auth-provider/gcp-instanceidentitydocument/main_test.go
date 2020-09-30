@@ -8,7 +8,7 @@ import (
 	"testing"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/stretchr/testify/assert"
 )
@@ -24,31 +24,31 @@ func TestProvide(t *testing.T) {
 	gcp.MetadataURL = ts.URL
 	provider := NewProvider()
 	marshalledUsername, err := plugin.MarshalConfigurationValue(
-		v1.ConfigType_STRING,
+		dockerregistryproxyv1.ConfigType_STRING,
 		"_test",
 	)
 	assert.NoError(t, err)
 	marshalledAudience, err := plugin.MarshalConfigurationValue(
-		v1.ConfigType_STRING,
+		dockerregistryproxyv1.ConfigType_STRING,
 		"foo.example.org",
 	)
 	assert.NoError(t, err)
 
-	_, err = provider.Configure(context.Background(), &v1.ConfigureRequest{
-		Attributes: map[string]*v1.ConfigurationAttributeValue{
-			"username": &v1.ConfigurationAttributeValue{
-				AttributeType: v1.ConfigType_STRING,
+	_, err = provider.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
+		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
+			"username": &dockerregistryproxyv1.ConfigurationAttributeValue{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
 				Value:         marshalledUsername,
 			},
-			"audience": &v1.ConfigurationAttributeValue{
-				AttributeType: v1.ConfigType_STRING,
+			"audience": &dockerregistryproxyv1.ConfigurationAttributeValue{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
 				Value:         marshalledAudience,
 			},
 		},
 	})
 	assert.NoError(t, err)
 
-	resp, err := provider.Provide(context.Background(), &v1.ProvideRequest{})
+	resp, err := provider.Provide(context.Background(), &dockerregistryproxyv1.ProvideRequest{})
 	assert.NoError(t, err)
 
 	assert.Equal(t, "_test", resp.GetUsername())

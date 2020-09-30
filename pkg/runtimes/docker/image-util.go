@@ -5,7 +5,7 @@ import (
 	"log"
 	"strings"
 
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/docker/distribution/reference"
 )
 
@@ -24,7 +24,7 @@ func GetRepository(imageRef string) (string, error) {
 }
 
 // ResolveRepositoryAuthProvider resolves the authentication provider to use for the given image
-func ResolveRepositoryAuthProvider(repository string, authProviders map[string]v1.AuthenticationProviderClient) (v1.AuthenticationProviderClient, error) {
+func ResolveRepositoryAuthProvider(repository string, authProviders map[string]dockerregistryproxyv1.AuthenticationProviderClient) (dockerregistryproxyv1.AuthenticationProviderClient, error) {
 
 	repoParts := strings.Split(repository, "/")
 	for i := len(repoParts); i > 0; i-- {

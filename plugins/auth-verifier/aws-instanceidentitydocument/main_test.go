@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/stretchr/testify/assert"
 	"go.mozilla.org/pkcs7"
@@ -88,14 +88,14 @@ func TestVerify(t *testing.T) {
 
 	verifier := NewVerifier()
 	marshalledUsername, err := plugin.MarshalConfigurationValue(
-		v1.ConfigType_STRING,
+		dockerregistryproxyv1.ConfigType_STRING,
 		"_",
 	)
 	assert.NoError(t, err)
-	_, err = verifier.Configure(context.Background(), &v1.ConfigureRequest{
-		Attributes: map[string]*v1.ConfigurationAttributeValue{
-			"username": &v1.ConfigurationAttributeValue{
-				AttributeType: v1.ConfigType_STRING,
+	_, err = verifier.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
+		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
+			"username": &dockerregistryproxyv1.ConfigurationAttributeValue{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
 				Value:         marshalledUsername,
 			},
 		},
@@ -110,7 +110,7 @@ func TestVerify(t *testing.T) {
 	encodedInstanceIdentityPassword, err := instanceIdentityPassword.Encode()
 	assert.NoError(t, err)
 
-	_, err = verifier.Verify(context.Background(), &v1.VerifyRequest{
+	_, err = verifier.Verify(context.Background(), &dockerregistryproxyv1.VerifyRequest{
 		Username: "_",
 		Password: encodedInstanceIdentityPassword,
 	})

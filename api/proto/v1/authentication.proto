@@ -1,7 +1,14 @@
 syntax = "proto3";
+
 package vjftw.dockerregistryproxy.v1;
 
-option go_package = "v1";
+option csharp_namespace = "Vjftw.Dockerregistryproxy.V1";
+option go_package = "dockerregistryproxyv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuthenticationProto";
+option java_package = "com.vjftw.dockerregistryproxy.v1";
+option objc_class_prefix = "VDX";
+option php_namespace = "Vjftw\\Dockerregistryproxy\\V1";
 
 import "google/protobuf/empty.proto";
 
@@ -65,4 +72,3 @@ message ProvideResponse {
   // RegistryToken is a bearer token to be sent to a registry
   string registry_token = 5;
 }
-

@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/runtimes/docker"
 	"github.com/stretchr/testify/assert"
 	"google.golang.org/grpc"
@@ -38,14 +38,14 @@ func TestResolveRepositoryAuthProvider(t *testing.T) {
 	c2 := testProviderClient("test2")
 	c3 := testProviderClient("test3")
 
-	var authProviders = map[string]v1.AuthenticationProviderClient{
+	var authProviders = map[string]dockerregistryproxyv1.AuthenticationProviderClient{
 		"example.org":         c1,
 		"example.org/bar":     c2,
 		"example.org/foo/bar": c3,
 	}
 	var tests = []struct {
 		in  string
-		out v1.AuthenticationProviderClient
+		out dockerregistryproxyv1.AuthenticationProviderClient
 	}{
 		{"example.org/example:12345", c1},
 		{"example.org/bar:12345", c2},
@@ -67,6 +67,6 @@ func TestResolveRepositoryAuthProvider(t *testing.T) {
 
 type testProviderClient string
 
-func (c testProviderClient) Provide(ctx context.Context, in *v1.ProvideRequest, opts ...grpc.CallOption) (*v1.ProvideResponse, error) {
+func (c testProviderClient) Provide(ctx context.Context, in *dockerregistryproxyv1.ProvideRequest, opts ...grpc.CallOption) (*dockerregistryproxyv1.ProvideResponse, error) {
 	return nil, nil
 }

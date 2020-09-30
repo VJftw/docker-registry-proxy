@@ -13,7 +13,7 @@ import (
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 )
 
 const (
@@ -41,11 +41,11 @@ func NewProvider() *Provider {
 }
 
 // GetConfigurationSchema returns the schema for the plugin
-func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*v1.ConfigurationSchema, error) {
-	return &v1.ConfigurationSchema{
-		Attributes: map[string]*v1.ConfigurationAttribute{
-			flagUsername: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING,
+func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.ConfigurationSchema, error) {
+	return &dockerregistryproxyv1.ConfigurationSchema{
+		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
+			flagUsername: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
 				Description:   "the routing username to provide credentials",
 			},
 		},
@@ -53,9 +53,9 @@ func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (
 }
 
 // Configure configures the plugin
-func (p *Provider) Configure(ctx context.Context, req *v1.ConfigureRequest) (*empty.Empty, error) {
+func (p *Provider) Configure(ctx context.Context, req *dockerregistryproxyv1.ConfigureRequest) (*empty.Empty, error) {
 	if val, ok := req.Attributes[flagUsername]; ok {
-		username, err := plugin.UnmarshalConfigurationValue(v1.ConfigType_STRING, val.GetValue())
+		username, err := plugin.UnmarshalConfigurationValue(dockerregistryproxyv1.ConfigType_STRING, val.GetValue())
 		if err != nil {
 			return nil, err
 		}
@@ -66,7 +66,7 @@ func (p *Provider) Configure(ctx context.Context, req *v1.ConfigureRequest) (*em
 }
 
 // Provide returns credentials TODO: cache response from metadata in memory
-func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.ProvideResponse, error) {
+func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.ProvideRequest) (*dockerregistryproxyv1.ProvideResponse, error) {
 
 	// tokenReq, _ := http.NewRequest("PUT", aws.ApiToken(), nil)
 	// tokenReq.Header = *aws.TokenHeader
@@ -118,7 +118,7 @@ func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.Pro
 		return nil, fmt.Errorf("could not encode instance identity password: %w", err)
 	}
 
-	return &v1.ProvideResponse{
+	return &dockerregistryproxyv1.ProvideResponse{
 		Username: p.username,
 		Password: encodedInstanceIdentityPassword,
 	}, nil

@@ -2,12 +2,18 @@ package(default_visibility = ["PUBLIC"])
 subinclude(
     "//third_party/defs:go_tool",
     "//third_party/defs:protoc",
+    "//plz:go_lint",
 )
 
 go_tool(
     name="go",
     version = "1.15.2",
     hashes = ["b49fda1ca29a1946d6bb2a5a6982cf07ccd2aba849289508ee0f9918f6bb4552"]
+)
+
+go_lint(
+    name="go_lint",
+    version="1.31.0",
 )
 
 protoc_binary(

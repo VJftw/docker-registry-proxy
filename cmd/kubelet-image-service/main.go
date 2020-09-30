@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/cmd"
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/VJftw/docker-registry-proxy/pkg/runtimes/docker"
 	"github.com/spf13/viper"
@@ -43,8 +43,8 @@ func main() {
 	cmd.Execute(rootCmd, grpcServer, preFunc)
 }
 
-func parseAuthenticationProviderClients() (map[string]v1.AuthenticationProviderClient, error) {
-	res := map[string]v1.AuthenticationProviderClient{}
+func parseAuthenticationProviderClients() (map[string]dockerregistryproxyv1.AuthenticationProviderClient, error) {
+	res := map[string]dockerregistryproxyv1.AuthenticationProviderClient{}
 	confs := viper.GetStringSlice(flagAuthenticationProviders)
 	for _, conf := range confs {
 		parts := strings.Split(conf, "=")

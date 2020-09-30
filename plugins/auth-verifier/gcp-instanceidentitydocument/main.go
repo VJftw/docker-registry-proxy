@@ -6,7 +6,7 @@ import (
 	"sync"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/golang/protobuf/ptypes/empty"
 )
@@ -25,8 +25,8 @@ func main() {
 
 // Verifier represents an AuthenticationVerifier
 type Verifier struct {
-	v1.AuthenticationVerifierServer
-	v1.ConfigurationServer
+	dockerregistryproxyv1.AuthenticationVerifierServer
+	dockerregistryproxyv1.ConfigurationServer
 
 	certificateManager *gcp.CertificateManager
 	wg                 sync.WaitGroup
@@ -47,27 +47,27 @@ func NewVerifier() *Verifier {
 }
 
 // GetConfigurationSchema returns the schema for the plugin
-func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*v1.ConfigurationSchema, error) {
-	return &v1.ConfigurationSchema{
-		Attributes: map[string]*v1.ConfigurationAttribute{
-			flagAudiences: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.ConfigurationSchema, error) {
+	return &dockerregistryproxyv1.ConfigurationSchema{
+		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
+			flagAudiences: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the audiences to accept",
 			},
-			flagProjectIDs: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagProjectIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the project IDs to accept",
 			},
-			flagProjectNumbers: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagProjectNumbers: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the project numbers to accept",
 			},
-			flagZones: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagZones: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the zones to accept",
 			},
-			flagLicenseIDs: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+			flagLicenseIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Description:   "the license IDs to accept",
 			},
 		},
@@ -75,7 +75,7 @@ func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (
 }
 
 // Configure configures the plugin
-func (v *Verifier) Configure(ctx context.Context, req *v1.ConfigureRequest) (*empty.Empty, error) {
+func (v *Verifier) Configure(ctx context.Context, req *dockerregistryproxyv1.ConfigureRequest) (*empty.Empty, error) {
 	v.audiences = plugin.GetStringSliceValue(flagAudiences, req)
 	v.projectIDs = plugin.GetStringSliceValue(flagProjectIDs, req)
 	v.zones = plugin.GetStringSliceValue(flagZones, req)
@@ -85,7 +85,7 @@ func (v *Verifier) Configure(ctx context.Context, req *v1.ConfigureRequest) (*em
 }
 
 // Verify checks the given credentials
-func (v *Verifier) Verify(ctx context.Context, req *v1.VerifyRequest) (*empty.Empty, error) {
+func (v *Verifier) Verify(ctx context.Context, req *dockerregistryproxyv1.VerifyRequest) (*empty.Empty, error) {
 	claims, err := gcp.GetTokenClaims(req.GetPassword(), v.certificateManager)
 	if err != nil {
 		return nil, err

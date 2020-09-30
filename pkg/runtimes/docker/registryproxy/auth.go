@@ -9,7 +9,7 @@ import (
 	"strings"
 	"time"
 
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/dgrijalva/jwt-go"
 	"go.uber.org/zap"
 )
@@ -110,7 +110,7 @@ func Authenticate(opts *ProxyOpts, res http.ResponseWriter, req *http.Request) {
 			return
 		}
 		repository = GetRepositoryFromScope(req.URL.Query().Get("scope"))
-		_, err := opts.AuthVerifiers[username].Verify(req.Context(), &v1.VerifyRequest{
+		_, err := opts.AuthVerifiers[username].Verify(req.Context(), &dockerregistryproxyv1.VerifyRequest{
 			Username:   username,
 			Password:   password,
 			Repository: repository,

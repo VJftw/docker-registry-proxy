@@ -11,7 +11,7 @@ import (
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
 	"github.com/golang/protobuf/ptypes/empty"
 
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 )
 
@@ -40,7 +40,7 @@ func NewProvider() *Provider {
 }
 
 // Provide returns credentials TODO: cache response from metadata in memory
-func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.ProvideResponse, error) {
+func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.ProvideRequest) (*dockerregistryproxyv1.ProvideResponse, error) {
 	metaReq, err := http.NewRequest("GET", gcp.MetadataToken(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("could not construct metadata request: %w", err)
@@ -58,18 +58,18 @@ func (p *Provider) Provide(ctx context.Context, req *v1.ProvideRequest) (*v1.Pro
 		return nil, fmt.Errorf("could not read metadata response: %w", err)
 	}
 
-	return &v1.ProvideResponse{
+	return &dockerregistryproxyv1.ProvideResponse{
 		Username: p.username,
 		Password: string(tokenBytes),
 	}, nil
 }
 
 // GetConfigurationSchema returns the schema for the plugin
-func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*v1.ConfigurationSchema, error) {
-	return &v1.ConfigurationSchema{
-		Attributes: map[string]*v1.ConfigurationAttribute{
-			flagUsername: &v1.ConfigurationAttribute{
-				AttributeType: v1.ConfigType_STRING,
+func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.ConfigurationSchema, error) {
+	return &dockerregistryproxyv1.ConfigurationSchema{
+		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
+			flagUsername: &dockerregistryproxyv1.ConfigurationAttribute{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
 				Description:   "the routing username to provide credentials",
 			},
 		},
@@ -77,9 +77,9 @@ func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (
 }
 
 // Configure configures the plugin
-func (p *Provider) Configure(ctx context.Context, req *v1.ConfigureRequest) (*empty.Empty, error) {
+func (p *Provider) Configure(ctx context.Context, req *dockerregistryproxyv1.ConfigureRequest) (*empty.Empty, error) {
 	if val, ok := req.Attributes[flagUsername]; ok {
-		username, err := plugin.UnmarshalConfigurationValue(v1.ConfigType_STRING, val.GetValue())
+		username, err := plugin.UnmarshalConfigurationValue(dockerregistryproxyv1.ConfigType_STRING, val.GetValue())
 		if err != nil {
 			return nil, err
 		}

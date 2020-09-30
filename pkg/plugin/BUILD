@@ -1,4 +1,4 @@
-go_library(
+go_lib(
     name = "plugin",
     srcs = [
         "auth-provider.go",
@@ -8,7 +8,7 @@ go_library(
         "plugin.go",
     ],
     deps = [
-        "//api/proto:v1",
+        "//api/proto/v1",
         "//third_party/go:hashicorp_plugin",
         "//third_party/go:grpc",
     ],

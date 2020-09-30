@@ -16,7 +16,7 @@ import (
 	"time"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
-	v1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
@@ -79,14 +79,14 @@ func TestVerify(t *testing.T) {
 
 	verifier := NewVerifier()
 	marshalledZones, err := plugin.MarshalConfigurationValue(
-		v1.ConfigType_STRING_SLICE,
+		dockerregistryproxyv1.ConfigType_STRING_SLICE,
 		[]string{"europe-west2-b"},
 	)
 	assert.NoError(t, err)
-	_, err = verifier.Configure(context.Background(), &v1.ConfigureRequest{
-		Attributes: map[string]*v1.ConfigurationAttributeValue{
-			"zones": &v1.ConfigurationAttributeValue{
-				AttributeType: v1.ConfigType_STRING_SLICE,
+	_, err = verifier.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
+		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
+			"zones": &dockerregistryproxyv1.ConfigurationAttributeValue{
+				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
 				Value:         marshalledZones,
 			},
 		},
@@ -95,7 +95,7 @@ func TestVerify(t *testing.T) {
 
 	tokenStr := getTokenStr(key)
 	log.Println(tokenStr)
-	_, err = verifier.Verify(context.Background(), &v1.VerifyRequest{
+	_, err = verifier.Verify(context.Background(), &dockerregistryproxyv1.VerifyRequest{
 		Username:   "_",
 		Password:   tokenStr,
 		Host:       "",
