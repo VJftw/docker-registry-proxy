@@ -1,6 +1,7 @@
 sh_cmd(
     name = "proto",
     cmd = """
+    set -e
     dirs=$(plz query alltargets --include=grpc | cut -f1 -d":" | cut -c 3-)
     for dir in \\\$dirs; do
         set -x; 
