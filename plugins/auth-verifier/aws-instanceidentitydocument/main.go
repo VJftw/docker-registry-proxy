@@ -30,8 +30,8 @@ func main() {
 
 // Verifier represents an AuthenticationVerifier
 type Verifier struct {
-	dockerregistryproxyv1.AuthenticationVerifierServer
-	dockerregistryproxyv1.ConfigurationServer
+	dockerregistryproxyv1.AuthenticationVerifierAPIServer
+	dockerregistryproxyv1.ConfigurationAPIServer
 
 	certs []*x509.Certificate
 
@@ -61,31 +61,31 @@ func NewVerifier() *Verifier {
 }
 
 // GetConfigurationSchema returns the schema for the plugin
-func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.ConfigurationSchema, error) {
-	return &dockerregistryproxyv1.ConfigurationSchema{
+func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
+	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
 			flagAvailabilityZones: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the availability zones to accept",
 			},
 			flagPrivateIPs: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the private IPs to accept",
 			},
 			flagInstanceIDs: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the instance IDs to accept",
 			},
 			flagAccountIDs: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the account IDs to accept",
 			},
 			flagImageIDs: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the image IDs to accept",
 			},
 			flagRegions: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the regions to accept",
 			},
 		},

@@ -38,14 +38,14 @@ func TestResolveRepositoryAuthProvider(t *testing.T) {
 	c2 := testProviderClient("test2")
 	c3 := testProviderClient("test3")
 
-	var authProviders = map[string]dockerregistryproxyv1.AuthenticationProviderClient{
+	var authProviders = map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient{
 		"example.org":         c1,
 		"example.org/bar":     c2,
 		"example.org/foo/bar": c3,
 	}
 	var tests = []struct {
 		in  string
-		out dockerregistryproxyv1.AuthenticationProviderClient
+		out dockerregistryproxyv1.AuthenticationProviderAPIClient
 	}{
 		{"example.org/example:12345", c1},
 		{"example.org/bar:12345", c2},

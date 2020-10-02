@@ -5,44 +5,15 @@ package vjftw.dockerregistryproxy.v1;
 option csharp_namespace = "Vjftw.Dockerregistryproxy.V1";
 option go_package = "dockerregistryproxyv1";
 option java_multiple_files = true;
-option java_outer_classname = "AuthenticationProto";
+option java_outer_classname = "AuthenticationProviderApiProto";
 option java_package = "com.vjftw.dockerregistryproxy.v1";
 option objc_class_prefix = "VDX";
 option php_namespace = "Vjftw\\Dockerregistryproxy\\V1";
 
-import "google/protobuf/empty.proto";
-
-// AuthenticationVerifier represents a service that the Docker Registry
-// Proxy uses to authenticate a request with.
-service AuthenticationVerifier {
-  // Verify takes the raw Base64 encoded BasicAuth credential supplied to
-  // the Docker Registry Proxy from the Docker client and authenticates
-  // with the implementation.
-  rpc Verify(VerifyRequest) returns (google.protobuf.Empty);
-}
-
-// VerifyRequest represents a message for an AuthenticationVerifier to verify.
-message VerifyRequest {
-  // username represents the username portion of the basic auth received from
-  // the docker client.
-  string username = 1;
-  // password represents the password portion of the basic auth received from
-  // the docker client.
-  string password = 2;
-  // host represents the host of the image that the docker client is attempting
-  // to pull. e.g. docker-proxy.example.org
-  string host = 3;
-  // repository represents the repository of the image that the docker client is
-  // attempting to pull. e.g. my-repository
-  string repository = 4;
-  // image represents the image that the docker client is attempting to pull.
-  // e.g. my-image:latest or my-image@sha256:digest
-  string image = 5;
-}
-
-// AuthenticationProvider represents a service that provides authentication
+// AuthenticationProviderAPI represents a service that provides authentication
 // credentials. This is used by the Kubelet Image Service.
-service AuthenticationProvider {
+service AuthenticationProviderAPI {
+  // Provide returns credentials for the given ProvideRequest.
   rpc Provide(ProvideRequest) returns (ProvideResponse);
 }
 

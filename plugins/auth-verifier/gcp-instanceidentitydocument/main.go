@@ -25,8 +25,8 @@ func main() {
 
 // Verifier represents an AuthenticationVerifier
 type Verifier struct {
-	dockerregistryproxyv1.AuthenticationVerifierServer
-	dockerregistryproxyv1.ConfigurationServer
+	dockerregistryproxyv1.AuthenticationVerifierAPIServer
+	dockerregistryproxyv1.ConfigurationAPIServer
 
 	certificateManager *gcp.CertificateManager
 	wg                 sync.WaitGroup
@@ -47,27 +47,27 @@ func NewVerifier() *Verifier {
 }
 
 // GetConfigurationSchema returns the schema for the plugin
-func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.ConfigurationSchema, error) {
-	return &dockerregistryproxyv1.ConfigurationSchema{
+func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
+	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
 			flagAudiences: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the audiences to accept",
 			},
 			flagProjectIDs: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the project IDs to accept",
 			},
 			flagProjectNumbers: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the project numbers to accept",
 			},
 			flagZones: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the zones to accept",
 			},
 			flagLicenseIDs: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the license IDs to accept",
 			},
 		},

@@ -10,7 +10,7 @@ import (
 )
 
 // RegistryAuthResolveGRPC resolves the registry authentication from via GRPC
-func RegistryAuthResolveGRPC(client dockerregistryproxyv1.AuthenticationProviderClient) (authn.Authenticator, error) {
+func RegistryAuthResolveGRPC(client dockerregistryproxyv1.AuthenticationProviderAPIClient) (authn.Authenticator, error) {
 	resp, err := client.Provide(context.Background(), &dockerregistryproxyv1.ProvideRequest{})
 	if err != nil {
 		return nil, err

@@ -79,14 +79,14 @@ func TestVerify(t *testing.T) {
 
 	verifier := NewVerifier()
 	marshalledZones, err := plugin.MarshalConfigurationValue(
-		dockerregistryproxyv1.ConfigType_STRING_SLICE,
+		dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 		[]string{"europe-west2-b"},
 	)
 	assert.NoError(t, err)
 	_, err = verifier.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
 			"zones": &dockerregistryproxyv1.ConfigurationAttributeValue{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING_SLICE,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Value:         marshalledZones,
 			},
 		},

@@ -26,7 +26,7 @@ type ProxyOpts struct {
 	Auth      authn.Authenticator
 	Transport http.RoundTripper
 
-	AuthVerifiers map[string]dockerregistryproxyv1.AuthenticationVerifierClient
+	AuthVerifiers map[string]dockerregistryproxyv1.AuthenticationVerifierAPIClient
 
 	TokenHMAC []byte
 }
@@ -34,8 +34,8 @@ type ProxyOpts struct {
 // GetProxyOpts validates and returns the given proxy handler options
 func GetProxyOpts(
 	upstreamAddr string,
-	upstreamAuthClient dockerregistryproxyv1.AuthenticationProviderClient,
-	authVerifiers map[string]dockerregistryproxyv1.AuthenticationVerifierClient,
+	upstreamAuthClient dockerregistryproxyv1.AuthenticationProviderAPIClient,
+	authVerifiers map[string]dockerregistryproxyv1.AuthenticationVerifierAPIClient,
 ) (*ProxyOpts, error) {
 
 	opts := &ProxyOpts{

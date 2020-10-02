@@ -21,11 +21,11 @@ import (
 type ImageService struct {
 	client *dockerclient.Client
 
-	authProviders map[string]dockerregistryproxyv1.AuthenticationProviderClient
+	authProviders map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient
 }
 
 // NewImageService returns a new instance of the Docker Image Service with the given authentication providers
-func NewImageService(authProviders map[string]dockerregistryproxyv1.AuthenticationProviderClient) (*ImageService, error) {
+func NewImageService(authProviders map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient) (*ImageService, error) {
 	client, err := dockerclient.NewClientWithOpts()
 	if err != nil {
 		return nil, fmt.Errorf("could not create new docker client: %w", err)

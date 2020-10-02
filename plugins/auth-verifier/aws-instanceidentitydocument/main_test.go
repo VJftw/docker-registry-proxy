@@ -88,14 +88,14 @@ func TestVerify(t *testing.T) {
 
 	verifier := NewVerifier()
 	marshalledUsername, err := plugin.MarshalConfigurationValue(
-		dockerregistryproxyv1.ConfigType_STRING,
+		dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 		"_",
 	)
 	assert.NoError(t, err)
 	_, err = verifier.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
 			"username": &dockerregistryproxyv1.ConfigurationAttributeValue{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Value:         marshalledUsername,
 			},
 		},

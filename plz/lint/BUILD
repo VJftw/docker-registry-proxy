@@ -18,7 +18,7 @@ sh_cmd(
     set -e
     set -x;
     dirs="$(plz query alltargets --include=go | grep -v third_party | cut -f1 -d":" | cut -c 3- | xargs)"
-    $(out_location //third_party/lang:golang_ci_lint) run -v \\\$dirs
+    $(out_location //third_party/lang:golang_ci_lint) run \\\$dirs
     set +x;
     """,
     data = ["//third_party/lang:golang_ci_lint"],

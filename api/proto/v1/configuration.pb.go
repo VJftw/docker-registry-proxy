@@ -4,13 +4,8 @@
 package dockerregistryproxyv1
 
 import (
-	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
-	empty "github.com/golang/protobuf/ptypes/empty"
-	grpc "google.golang.org/grpc"
-	codes "google.golang.org/grpc/codes"
-	status "google.golang.org/grpc/status"
 	math "math"
 )
 
@@ -30,39 +25,42 @@ const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 type ConfigType int32
 
 const (
-	ConfigType_BOOL         ConfigType = 0
-	ConfigType_FLOAT64      ConfigType = 1
-	ConfigType_INT          ConfigType = 2
-	ConfigType_INT_SLICE    ConfigType = 3
-	ConfigType_STRING       ConfigType = 4
-	ConfigType_STRING_MAP   ConfigType = 5
-	ConfigType_STRING_SLICE ConfigType = 6
-	ConfigType_TIME         ConfigType = 7
-	ConfigType_DURATION     ConfigType = 8
+	ConfigType_CONFIG_TYPE_INVALID      ConfigType = 0
+	ConfigType_CONFIG_TYPE_BOOL         ConfigType = 1
+	ConfigType_CONFIG_TYPE_FLOAT64      ConfigType = 2
+	ConfigType_CONFIG_TYPE_INT          ConfigType = 3
+	ConfigType_CONFIG_TYPE_INT_SLICE    ConfigType = 4
+	ConfigType_CONFIG_TYPE_STRING       ConfigType = 5
+	ConfigType_CONFIG_TYPE_STRING_MAP   ConfigType = 6
+	ConfigType_CONFIG_TYPE_STRING_SLICE ConfigType = 7
+	ConfigType_CONFIG_TYPE_TIME         ConfigType = 8
+	ConfigType_CONFIG_TYPE_DURATION     ConfigType = 9
 )
 
 var ConfigType_name = map[int32]string{
-	0: "BOOL",
-	1: "FLOAT64",
-	2: "INT",
-	3: "INT_SLICE",
-	4: "STRING",
-	5: "STRING_MAP",
-	6: "STRING_SLICE",
-	7: "TIME",
-	8: "DURATION",
+	0: "CONFIG_TYPE_INVALID",
+	1: "CONFIG_TYPE_BOOL",
+	2: "CONFIG_TYPE_FLOAT64",
+	3: "CONFIG_TYPE_INT",
+	4: "CONFIG_TYPE_INT_SLICE",
+	5: "CONFIG_TYPE_STRING",
+	6: "CONFIG_TYPE_STRING_MAP",
+	7: "CONFIG_TYPE_STRING_SLICE",
+	8: "CONFIG_TYPE_TIME",
+	9: "CONFIG_TYPE_DURATION",
 }
 
 var ConfigType_value = map[string]int32{
-	"BOOL":         0,
-	"FLOAT64":      1,
-	"INT":          2,
-	"INT_SLICE":    3,
-	"STRING":       4,
-	"STRING_MAP":   5,
-	"STRING_SLICE": 6,
-	"TIME":         7,
-	"DURATION":     8,
+	"CONFIG_TYPE_INVALID":      0,
+	"CONFIG_TYPE_BOOL":         1,
+	"CONFIG_TYPE_FLOAT64":      2,
+	"CONFIG_TYPE_INT":          3,
+	"CONFIG_TYPE_INT_SLICE":    4,
+	"CONFIG_TYPE_STRING":       5,
+	"CONFIG_TYPE_STRING_MAP":   6,
+	"CONFIG_TYPE_STRING_SLICE": 7,
+	"CONFIG_TYPE_TIME":         8,
+	"CONFIG_TYPE_DURATION":     9,
 }
 
 func (x ConfigType) String() string {
@@ -73,47 +71,7 @@ func (ConfigType) EnumDescriptor() ([]byte, []int) {
 	return fileDescriptor_71e411e426306cd3, []int{0}
 }
 
-// ConfigurationSchema represents the configuration for a plugin.
-type ConfigurationSchema struct {
-	// key is attribute name
-	Attributes           map[string]*ConfigurationAttribute `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	XXX_NoUnkeyedLiteral struct{}                           `json:"-"`
-	XXX_unrecognized     []byte                             `json:"-"`
-	XXX_sizecache        int32                              `json:"-"`
-}
-
-func (m *ConfigurationSchema) Reset()         { *m = ConfigurationSchema{} }
-func (m *ConfigurationSchema) String() string { return proto.CompactTextString(m) }
-func (*ConfigurationSchema) ProtoMessage()    {}
-func (*ConfigurationSchema) Descriptor() ([]byte, []int) {
-	return fileDescriptor_71e411e426306cd3, []int{0}
-}
-
-func (m *ConfigurationSchema) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ConfigurationSchema.Unmarshal(m, b)
-}
-func (m *ConfigurationSchema) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ConfigurationSchema.Marshal(b, m, deterministic)
-}
-func (m *ConfigurationSchema) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigurationSchema.Merge(m, src)
-}
-func (m *ConfigurationSchema) XXX_Size() int {
-	return xxx_messageInfo_ConfigurationSchema.Size(m)
-}
-func (m *ConfigurationSchema) XXX_DiscardUnknown() {
-	xxx_messageInfo_ConfigurationSchema.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ConfigurationSchema proto.InternalMessageInfo
-
-func (m *ConfigurationSchema) GetAttributes() map[string]*ConfigurationAttribute {
-	if m != nil {
-		return m.Attributes
-	}
-	return nil
-}
-
+// ConfigurationAttribute represents a configuration attribute for a plugin.
 type ConfigurationAttribute struct {
 	AttributeType        ConfigType `protobuf:"varint,1,opt,name=attribute_type,json=attributeType,proto3,enum=vjftw.dockerregistryproxy.v1.ConfigType" json:"attribute_type,omitempty"`
 	Description          string     `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
@@ -126,7 +84,7 @@ func (m *ConfigurationAttribute) Reset()         { *m = ConfigurationAttribute{}
 func (m *ConfigurationAttribute) String() string { return proto.CompactTextString(m) }
 func (*ConfigurationAttribute) ProtoMessage()    {}
 func (*ConfigurationAttribute) Descriptor() ([]byte, []int) {
-	return fileDescriptor_71e411e426306cd3, []int{1}
+	return fileDescriptor_71e411e426306cd3, []int{0}
 }
 
 func (m *ConfigurationAttribute) XXX_Unmarshal(b []byte) error {
@@ -151,7 +109,7 @@ func (m *ConfigurationAttribute) GetAttributeType() ConfigType {
 	if m != nil {
 		return m.AttributeType
 	}
-	return ConfigType_BOOL
+	return ConfigType_CONFIG_TYPE_INVALID
 }
 
 func (m *ConfigurationAttribute) GetDescription() string {
@@ -161,6 +119,7 @@ func (m *ConfigurationAttribute) GetDescription() string {
 	return ""
 }
 
+// ConfigurationAttributeValue represents the value of a configuration attribute for a plugin.
 type ConfigurationAttributeValue struct {
 	AttributeType        ConfigType `protobuf:"varint,1,opt,name=attribute_type,json=attributeType,proto3,enum=vjftw.dockerregistryproxy.v1.ConfigType" json:"attribute_type,omitempty"`
 	Value                []byte     `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
@@ -173,7 +132,7 @@ func (m *ConfigurationAttributeValue) Reset()         { *m = ConfigurationAttrib
 func (m *ConfigurationAttributeValue) String() string { return proto.CompactTextString(m) }
 func (*ConfigurationAttributeValue) ProtoMessage()    {}
 func (*ConfigurationAttributeValue) Descriptor() ([]byte, []int) {
-	return fileDescriptor_71e411e426306cd3, []int{2}
+	return fileDescriptor_71e411e426306cd3, []int{1}
 }
 
 func (m *ConfigurationAttributeValue) XXX_Unmarshal(b []byte) error {
@@ -198,7 +157,7 @@ func (m *ConfigurationAttributeValue) GetAttributeType() ConfigType {
 	if m != nil {
 		return m.AttributeType
 	}
-	return ConfigType_BOOL
+	return ConfigType_CONFIG_TYPE_INVALID
 }
 
 func (m *ConfigurationAttributeValue) GetValue() []byte {
@@ -208,53 +167,10 @@ func (m *ConfigurationAttributeValue) GetValue() []byte {
 	return nil
 }
 
-type ConfigureRequest struct {
-	Attributes           map[string]*ConfigurationAttributeValue `protobuf:"bytes,1,rep,name=attributes,proto3" json:"attributes,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	XXX_NoUnkeyedLiteral struct{}                                `json:"-"`
-	XXX_unrecognized     []byte                                  `json:"-"`
-	XXX_sizecache        int32                                   `json:"-"`
-}
-
-func (m *ConfigureRequest) Reset()         { *m = ConfigureRequest{} }
-func (m *ConfigureRequest) String() string { return proto.CompactTextString(m) }
-func (*ConfigureRequest) ProtoMessage()    {}
-func (*ConfigureRequest) Descriptor() ([]byte, []int) {
-	return fileDescriptor_71e411e426306cd3, []int{3}
-}
-
-func (m *ConfigureRequest) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_ConfigureRequest.Unmarshal(m, b)
-}
-func (m *ConfigureRequest) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_ConfigureRequest.Marshal(b, m, deterministic)
-}
-func (m *ConfigureRequest) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_ConfigureRequest.Merge(m, src)
-}
-func (m *ConfigureRequest) XXX_Size() int {
-	return xxx_messageInfo_ConfigureRequest.Size(m)
-}
-func (m *ConfigureRequest) XXX_DiscardUnknown() {
-	xxx_messageInfo_ConfigureRequest.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_ConfigureRequest proto.InternalMessageInfo
-
-func (m *ConfigureRequest) GetAttributes() map[string]*ConfigurationAttributeValue {
-	if m != nil {
-		return m.Attributes
-	}
-	return nil
-}
-
 func init() {
 	proto.RegisterEnum("vjftw.dockerregistryproxy.v1.ConfigType", ConfigType_name, ConfigType_value)
-	proto.RegisterType((*ConfigurationSchema)(nil), "vjftw.dockerregistryproxy.v1.ConfigurationSchema")
-	proto.RegisterMapType((map[string]*ConfigurationAttribute)(nil), "vjftw.dockerregistryproxy.v1.ConfigurationSchema.AttributesEntry")
 	proto.RegisterType((*ConfigurationAttribute)(nil), "vjftw.dockerregistryproxy.v1.ConfigurationAttribute")
 	proto.RegisterType((*ConfigurationAttributeValue)(nil), "vjftw.dockerregistryproxy.v1.ConfigurationAttributeValue")
-	proto.RegisterType((*ConfigureRequest)(nil), "vjftw.dockerregistryproxy.v1.ConfigureRequest")
-	proto.RegisterMapType((map[string]*ConfigurationAttributeValue)(nil), "vjftw.dockerregistryproxy.v1.ConfigureRequest.AttributesEntry")
 }
 
 func init() {
@@ -262,159 +178,29 @@ func init() {
 }
 
 var fileDescriptor_71e411e426306cd3 = []byte{
-	// 532 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x93, 0xdd, 0x8e, 0xd2, 0x40,
-	0x14, 0xc7, 0x1d, 0xd8, 0xe5, 0xe3, 0xf0, 0xe1, 0x64, 0x54, 0x42, 0xd8, 0xbd, 0x68, 0xb8, 0x22,
-	0x5e, 0x0c, 0x29, 0x6e, 0x8c, 0x7a, 0x61, 0x02, 0x0b, 0x6e, 0x6a, 0x58, 0x4a, 0x4a, 0x25, 0xc6,
-	0x6c, 0x24, 0xa5, 0x3b, 0x60, 0xdd, 0x85, 0xd6, 0x32, 0xd4, 0xed, 0xa5, 0x89, 0x77, 0x5e, 0xfa,
-	0x06, 0x5e, 0xfa, 0x26, 0xfa, 0x2c, 0xfa, 0x0e, 0xa6, 0x2d, 0xd4, 0x62, 0x2a, 0x01, 0xe3, 0xdd,
-	0xcc, 0x9c, 0x33, 0xbf, 0xf3, 0x9f, 0xf3, 0x9f, 0x03, 0x82, 0x66, 0x19, 0x75, 0xcb, 0x36, 0xb9,
-	0x59, 0x77, 0xc4, 0xba, 0x6e, 0xce, 0x27, 0xc6, 0x74, 0x69, 0x6b, 0xdc, 0x30, 0xe7, 0xd4, 0x3f,
-	0x26, 0xc7, 0xce, 0xdb, 0x09, 0x7f, 0x4f, 0x2f, 0x4d, 0xfd, 0x8a, 0xd9, 0x36, 0x9b, 0x1a, 0x0b,
-	0x6e, 0xbb, 0x96, 0x6d, 0xde, 0xb8, 0xd4, 0x11, 0x2b, 0x47, 0x53, 0xd3, 0x9c, 0x5e, 0xb3, 0x00,
-	0x31, 0x5e, 0x4e, 0xea, 0x6c, 0x66, 0x71, 0x37, 0xb8, 0x5a, 0xfd, 0x89, 0xe0, 0xce, 0x69, 0x14,
-	0x39, 0xd0, 0xdf, 0xb0, 0x99, 0x46, 0x34, 0x00, 0x8d, 0x73, 0xdb, 0x18, 0x2f, 0x39, 0x5b, 0x94,
-	0x91, 0x90, 0xac, 0xe5, 0x1a, 0x4d, 0xba, 0xad, 0x0e, 0x8d, 0xc1, 0xd0, 0x66, 0xc8, 0xe8, 0xcc,
-	0xb9, 0xed, 0x2a, 0x11, 0x68, 0x65, 0x01, 0xb7, 0xff, 0x08, 0x13, 0x0c, 0xc9, 0x2b, 0xe6, 0x96,
-	0x91, 0x80, 0x6a, 0x59, 0xc5, 0x5b, 0x92, 0xe7, 0x70, 0xe8, 0x68, 0xd7, 0x4b, 0x56, 0x4e, 0x08,
-	0xa8, 0x96, 0x6b, 0x9c, 0xec, 0x21, 0x21, 0x84, 0x2b, 0x01, 0xe2, 0x49, 0xe2, 0x11, 0xaa, 0x7e,
-	0x42, 0x50, 0x8a, 0xcf, 0x22, 0x32, 0x14, 0x43, 0x75, 0x23, 0xee, 0x5a, 0xcc, 0xd7, 0x51, 0x6c,
-	0xd4, 0x76, 0xa9, 0xa9, 0xba, 0x16, 0x53, 0x0a, 0xe1, 0x7d, 0x6f, 0x4b, 0x04, 0xc8, 0x5d, 0xb2,
-	0x85, 0x6e, 0x1b, 0x96, 0x57, 0xc8, 0x7f, 0x41, 0x56, 0x89, 0x1e, 0x55, 0x3f, 0x22, 0x38, 0x8a,
-	0x57, 0x33, 0xf4, 0x14, 0xff, 0x7f, 0x49, 0x77, 0xa3, 0xed, 0xcc, 0xaf, 0x1a, 0x53, 0xfd, 0x81,
-	0x00, 0xaf, 0x65, 0x30, 0x85, 0xbd, 0x5b, 0xb2, 0x05, 0x27, 0xaf, 0x63, 0x7e, 0xc0, 0xd3, 0xdd,
-	0xda, 0xbf, 0x66, 0x6c, 0xb5, 0xff, 0x66, 0x17, 0xfb, 0xe5, 0x4d, 0xfb, 0x1f, 0xff, 0x8b, 0xfd,
-	0x7e, 0x2b, 0x23, 0x7f, 0xe0, 0xfe, 0x07, 0x04, 0xf0, 0xbb, 0x45, 0x24, 0x03, 0x07, 0x2d, 0x59,
-	0xee, 0xe2, 0x5b, 0x24, 0x07, 0xe9, 0x67, 0x5d, 0xb9, 0xa9, 0x3e, 0x3c, 0xc1, 0x88, 0xa4, 0x21,
-	0x29, 0xf5, 0x54, 0x9c, 0x20, 0x05, 0xc8, 0x4a, 0x3d, 0x75, 0x34, 0xe8, 0x4a, 0xa7, 0x1d, 0x9c,
-	0x24, 0x00, 0xa9, 0x81, 0xaa, 0x48, 0xbd, 0x33, 0x7c, 0x40, 0x8a, 0x00, 0xc1, 0x7a, 0x74, 0xde,
-	0xec, 0xe3, 0x43, 0x82, 0x21, 0xbf, 0xda, 0x07, 0xd9, 0x29, 0x0f, 0xae, 0x4a, 0xe7, 0x1d, 0x9c,
-	0x26, 0x79, 0xc8, 0xb4, 0x5f, 0x28, 0x4d, 0x55, 0x92, 0x7b, 0x38, 0xd3, 0xf8, 0x86, 0xa0, 0xb0,
-	0x21, 0x97, 0xe8, 0x50, 0x3a, 0x63, 0x3c, 0x6e, 0x16, 0x4b, 0x34, 0x98, 0x60, 0xba, 0x9e, 0x60,
-	0xda, 0xf1, 0x26, 0xb8, 0x22, 0xee, 0x3d, 0x8f, 0x64, 0x00, 0xd9, 0xd0, 0x24, 0x42, 0xf7, 0x73,
-	0xb3, 0xf2, 0x17, 0x1d, 0xad, 0xcf, 0x08, 0x04, 0xdd, 0x9c, 0x6d, 0xa5, 0xb5, 0xc8, 0x86, 0x9c,
-	0xbe, 0x47, 0xe8, 0xa3, 0x57, 0xf7, 0x62, 0xb2, 0x1d, 0xf1, 0x4b, 0x22, 0x39, 0x6c, 0xbf, 0xfc,
-	0x9a, 0x38, 0x1e, 0xfa, 0xc4, 0x76, 0x0c, 0x71, 0x28, 0x7e, 0x5f, 0x85, 0x2f, 0x62, 0xc2, 0x17,
-	0x43, 0x71, 0x9c, 0xf2, 0x55, 0x3e, 0xf8, 0x15, 0x00, 0x00, 0xff, 0xff, 0x7d, 0x3c, 0xb4, 0xc9,
-	0x3f, 0x05, 0x00, 0x00,
-}
-
-// Reference imports to suppress errors if they are not otherwise used.
-var _ context.Context
-var _ grpc.ClientConnInterface
-
-// This is a compile-time assertion to ensure that this generated file
-// is compatible with the grpc package it is being compiled against.
-const _ = grpc.SupportPackageIsVersion6
-
-// ConfigurationClient is the client API for Configuration service.
-//
-// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
-type ConfigurationClient interface {
-	// GetConfigurationSchema returns the schema for the plugin
-	GetConfigurationSchema(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*ConfigurationSchema, error)
-	// Configure configures the plugin
-	Configure(ctx context.Context, in *ConfigureRequest, opts ...grpc.CallOption) (*empty.Empty, error)
-}
-
-type configurationClient struct {
-	cc grpc.ClientConnInterface
-}
-
-func NewConfigurationClient(cc grpc.ClientConnInterface) ConfigurationClient {
-	return &configurationClient{cc}
-}
-
-func (c *configurationClient) GetConfigurationSchema(ctx context.Context, in *empty.Empty, opts ...grpc.CallOption) (*ConfigurationSchema, error) {
-	out := new(ConfigurationSchema)
-	err := c.cc.Invoke(ctx, "/vjftw.dockerregistryproxy.v1.Configuration/GetConfigurationSchema", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *configurationClient) Configure(ctx context.Context, in *ConfigureRequest, opts ...grpc.CallOption) (*empty.Empty, error) {
-	out := new(empty.Empty)
-	err := c.cc.Invoke(ctx, "/vjftw.dockerregistryproxy.v1.Configuration/Configure", in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-// ConfigurationServer is the server API for Configuration service.
-type ConfigurationServer interface {
-	// GetConfigurationSchema returns the schema for the plugin
-	GetConfigurationSchema(context.Context, *empty.Empty) (*ConfigurationSchema, error)
-	// Configure configures the plugin
-	Configure(context.Context, *ConfigureRequest) (*empty.Empty, error)
-}
-
-// UnimplementedConfigurationServer can be embedded to have forward compatible implementations.
-type UnimplementedConfigurationServer struct {
-}
-
-func (*UnimplementedConfigurationServer) GetConfigurationSchema(ctx context.Context, req *empty.Empty) (*ConfigurationSchema, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetConfigurationSchema not implemented")
-}
-func (*UnimplementedConfigurationServer) Configure(ctx context.Context, req *ConfigureRequest) (*empty.Empty, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Configure not implemented")
-}
-
-func RegisterConfigurationServer(s *grpc.Server, srv ConfigurationServer) {
-	s.RegisterService(&_Configuration_serviceDesc, srv)
-}
-
-func _Configuration_GetConfigurationSchema_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(empty.Empty)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ConfigurationServer).GetConfigurationSchema(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/vjftw.dockerregistryproxy.v1.Configuration/GetConfigurationSchema",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConfigurationServer).GetConfigurationSchema(ctx, req.(*empty.Empty))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _Configuration_Configure_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(ConfigureRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ConfigurationServer).Configure(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: "/vjftw.dockerregistryproxy.v1.Configuration/Configure",
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ConfigurationServer).Configure(ctx, req.(*ConfigureRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-var _Configuration_serviceDesc = grpc.ServiceDesc{
-	ServiceName: "vjftw.dockerregistryproxy.v1.Configuration",
-	HandlerType: (*ConfigurationServer)(nil),
-	Methods: []grpc.MethodDesc{
-		{
-			MethodName: "GetConfigurationSchema",
-			Handler:    _Configuration_GetConfigurationSchema_Handler,
-		},
-		{
-			MethodName: "Configure",
-			Handler:    _Configuration_Configure_Handler,
-		},
-	},
-	Streams:  []grpc.StreamDesc{},
-	Metadata: "api/proto/v1/configuration.proto",
+	// 383 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xb4, 0x92, 0xcd, 0xae, 0x93, 0x50,
+	0x14, 0x85, 0x3d, 0xd4, 0x56, 0xbb, 0xd5, 0x7a, 0x72, 0xfa, 0x23, 0x6a, 0x07, 0xa4, 0xa3, 0xc6,
+	0x01, 0x0d, 0x6a, 0x9c, 0xd3, 0xd2, 0x36, 0x24, 0x14, 0x08, 0x45, 0xa2, 0xa6, 0x09, 0xa1, 0x94,
+	0x36, 0xf8, 0x53, 0xc8, 0xe9, 0x29, 0xca, 0xdc, 0x38, 0x71, 0xe8, 0x1b, 0x38, 0xf4, 0x51, 0x7c,
+	0xaa, 0x1b, 0xe8, 0xfd, 0xa1, 0xbd, 0xa4, 0xb3, 0x3b, 0xdc, 0x6b, 0xed, 0xf5, 0xb1, 0xc2, 0xd9,
+	0x20, 0x78, 0x71, 0x38, 0x88, 0x69, 0xc4, 0xa2, 0x41, 0x22, 0x0d, 0xfc, 0x68, 0xbb, 0x0e, 0x37,
+	0x7b, 0xea, 0xb1, 0x30, 0xda, 0x8a, 0xb9, 0x4c, 0xba, 0xc9, 0xe7, 0x35, 0xfb, 0x2e, 0xae, 0x22,
+	0xff, 0x4b, 0x40, 0x69, 0xb0, 0x09, 0x77, 0x8c, 0xa6, 0x31, 0x8d, 0x7e, 0xa4, 0x62, 0x22, 0xf5,
+	0x7e, 0x23, 0xe8, 0x8c, 0x8a, 0x29, 0x99, 0x31, 0x1a, 0x2e, 0xf7, 0x2c, 0x20, 0x06, 0x34, 0xbc,
+	0xab, 0xc1, 0x65, 0x69, 0x1c, 0xf0, 0x48, 0x40, 0xfd, 0xc6, 0xeb, 0xbe, 0x78, 0x8e, 0x28, 0x1e,
+	0x68, 0x76, 0x1a, 0x07, 0xd6, 0x93, 0xeb, 0x7c, 0x36, 0x12, 0x01, 0x1e, 0xad, 0x82, 0x9d, 0x4f,
+	0xc3, 0x38, 0xfb, 0x10, 0xcf, 0x09, 0xa8, 0x5f, 0xb7, 0x8a, 0x52, 0xef, 0x27, 0x82, 0x97, 0xe5,
+	0x6d, 0x1c, 0xef, 0xeb, 0xfe, 0x0e, 0x2a, 0xb5, 0xa0, 0x9a, 0x64, 0xe4, 0xbc, 0xcc, 0x63, 0xeb,
+	0x30, 0xbc, 0xfa, 0xc5, 0x01, 0xdc, 0x64, 0xc8, 0x33, 0x68, 0x8e, 0x0c, 0x7d, 0xa2, 0x4e, 0x5d,
+	0xfb, 0xa3, 0x39, 0x76, 0x55, 0xdd, 0x91, 0x35, 0x55, 0xc1, 0xf7, 0x48, 0x0b, 0x70, 0xd1, 0x18,
+	0x1a, 0x86, 0x86, 0xd1, 0xe9, 0xfa, 0x44, 0x33, 0x64, 0xfb, 0xdd, 0x5b, 0xcc, 0x91, 0x26, 0x3c,
+	0x3d, 0xe6, 0xd8, 0xb8, 0x42, 0x9e, 0x43, 0xfb, 0x44, 0x74, 0xe7, 0x9a, 0x3a, 0x1a, 0xe3, 0xfb,
+	0xa4, 0x03, 0xa4, 0x68, 0xcd, 0x6d, 0x4b, 0xd5, 0xa7, 0xb8, 0x4a, 0x5e, 0x40, 0xe7, 0xb6, 0xee,
+	0xce, 0x64, 0x13, 0xd7, 0x48, 0x17, 0xf8, 0x12, 0xef, 0x40, 0x7c, 0x70, 0x5a, 0xd8, 0x56, 0x67,
+	0x63, 0xfc, 0x90, 0xf0, 0xd0, 0x2a, 0xaa, 0xca, 0x7b, 0x4b, 0xb6, 0x55, 0x43, 0xc7, 0xf5, 0xe1,
+	0x1f, 0x04, 0x82, 0x1f, 0x7d, 0x3b, 0xfb, 0x77, 0x87, 0xe4, 0xe8, 0xc5, 0xcc, 0xec, 0xe8, 0x4c,
+	0xf4, 0xa9, 0x5d, 0xb2, 0x9d, 0x48, 0x7f, 0xb9, 0x8a, 0xa3, 0x7c, 0xf8, 0xc7, 0x75, 0x9d, 0x9c,
+	0xa8, 0x94, 0x10, 0x1d, 0xe9, 0xff, 0xa5, 0xbd, 0x28, 0xb1, 0x17, 0x8e, 0xb4, 0xac, 0xe5, 0x87,
+	0xfd, 0xe6, 0x22, 0x00, 0x00, 0xff, 0xff, 0x3d, 0x36, 0xdc, 0x9a, 0xfc, 0x02, 0x00, 0x00,
 }

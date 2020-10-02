@@ -10,45 +10,29 @@ option java_package = "com.vjftw.dockerregistryproxy.v1";
 option objc_class_prefix = "VDX";
 option php_namespace = "Vjftw\\Dockerregistryproxy\\V1";
 
-import "google/protobuf/empty.proto";
-
-service Configuration {
-  // GetConfigurationSchema returns the schema for the plugin
-  rpc GetConfigurationSchema(google.protobuf.Empty) returns (ConfigurationSchema);
-  // Configure configures the plugin
-  rpc Configure(ConfigureRequest) returns (google.protobuf.Empty);
-}
-
-// ConfigurationSchema represents the configuration for a plugin.
-message ConfigurationSchema {
-  // key is attribute name
-  map<string, ConfigurationAttribute> attributes = 1;
-}
-
 // ConfigType represents the available field types from:
 // https://github.com/spf13/viper#getting-values-from-viper
 enum ConfigType {
-  BOOL = 0;
-  FLOAT64 = 1;
-  INT = 2;
-  INT_SLICE = 3;
-  STRING = 4;
-  STRING_MAP = 5;
-  STRING_SLICE = 6;
-  TIME = 7;
-  DURATION = 8;
+  CONFIG_TYPE_INVALID = 0;
+  CONFIG_TYPE_BOOL = 1;
+  CONFIG_TYPE_FLOAT64 = 2;
+  CONFIG_TYPE_INT = 3;
+  CONFIG_TYPE_INT_SLICE = 4;
+  CONFIG_TYPE_STRING = 5;
+  CONFIG_TYPE_STRING_MAP = 6;
+  CONFIG_TYPE_STRING_SLICE = 7;
+  CONFIG_TYPE_TIME = 8;
+  CONFIG_TYPE_DURATION = 9;
 }
 
+// ConfigurationAttribute represents a configuration attribute for a plugin.
 message ConfigurationAttribute {
   ConfigType attribute_type = 1;
   string description = 2;
 }
 
+// ConfigurationAttributeValue represents the value of a configuration attribute for a plugin.
 message ConfigurationAttributeValue {
   ConfigType attribute_type = 1;
   bytes value = 2;
-}
-
-message ConfigureRequest {
-  map<string, ConfigurationAttributeValue> attributes = 1;
 }

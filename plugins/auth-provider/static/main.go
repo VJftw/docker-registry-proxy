@@ -20,8 +20,8 @@ func main() {
 
 // Provider represents an AuthenticationProvider using static credentials
 type Provider struct {
-	dockerregistryproxyv1.AuthenticationProviderServer
-	dockerregistryproxyv1.ConfigurationServer
+	dockerregistryproxyv1.AuthenticationProviderAPIServer
+	dockerregistryproxyv1.ConfigurationAPIServer
 
 	username string
 	password string
@@ -36,15 +36,15 @@ func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.Provi
 }
 
 // GetConfigurationSchema returns the schema for the plugin
-func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.ConfigurationSchema, error) {
-	return &dockerregistryproxyv1.ConfigurationSchema{
+func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
+	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
 			flagUsername: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Description:   "the static username",
 			},
 			flagPassword: &dockerregistryproxyv1.ConfigurationAttribute{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Description:   "the static password",
 			},
 		},
@@ -54,7 +54,7 @@ func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (
 // Configure configures the plugin
 func (p *Provider) Configure(ctx context.Context, req *dockerregistryproxyv1.ConfigureRequest) (*empty.Empty, error) {
 	if val, ok := req.Attributes[flagUsername]; ok {
-		username, err := plugin.UnmarshalConfigurationValue(dockerregistryproxyv1.ConfigType_STRING, val.GetValue())
+		username, err := plugin.UnmarshalConfigurationValue(dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING, val.GetValue())
 		if err != nil {
 			return nil, err
 		}
@@ -62,7 +62,7 @@ func (p *Provider) Configure(ctx context.Context, req *dockerregistryproxyv1.Con
 		log.Printf("configured username as '%s'", p.username)
 	}
 	if val, ok := req.Attributes[flagPassword]; ok {
-		password, err := plugin.UnmarshalConfigurationValue(dockerregistryproxyv1.ConfigType_STRING, val.GetValue())
+		password, err := plugin.UnmarshalConfigurationValue(dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING, val.GetValue())
 		if err != nil {
 			return nil, err
 		}

@@ -64,7 +64,7 @@ func LoadPluginsFromConfigSlice(configs []string) error {
 	return nil
 }
 
-func GetAuthProviderClient(alias string) (dockerregistryproxyv1.AuthenticationProviderClient, error) {
+func GetAuthProviderClient(alias string) (dockerregistryproxyv1.AuthenticationProviderAPIClient, error) {
 	if _, ok := PluginClients[alias]; !ok {
 		return nil, fmt.Errorf("plugin for alias '%s' is not loaded", alias)
 	}
@@ -80,10 +80,10 @@ func GetAuthProviderClient(alias string) (dockerregistryproxyv1.AuthenticationPr
 		return nil, err
 	}
 
-	return raw.(dockerregistryproxyv1.AuthenticationProviderClient), nil
+	return raw.(dockerregistryproxyv1.AuthenticationProviderAPIClient), nil
 }
 
-func GetAuthVerifierClient(alias string) (dockerregistryproxyv1.AuthenticationVerifierClient, error) {
+func GetAuthVerifierClient(alias string) (dockerregistryproxyv1.AuthenticationVerifierAPIClient, error) {
 	if _, ok := PluginClients[alias]; !ok {
 		return nil, fmt.Errorf("plugin for alias '%s' is not loaded", alias)
 	}
@@ -99,10 +99,10 @@ func GetAuthVerifierClient(alias string) (dockerregistryproxyv1.AuthenticationVe
 		return nil, err
 	}
 
-	return raw.(dockerregistryproxyv1.AuthenticationVerifierClient), nil
+	return raw.(dockerregistryproxyv1.AuthenticationVerifierAPIClient), nil
 }
 
-func GetConfigurationClient(alias string) (dockerregistryproxyv1.ConfigurationClient, error) {
+func GetConfigurationAPIClient(alias string) (dockerregistryproxyv1.ConfigurationAPIClient, error) {
 	if _, ok := PluginClients[alias]; !ok {
 		return nil, fmt.Errorf("plugin for alias '%s' is not loaded", alias)
 	}
@@ -118,7 +118,7 @@ func GetConfigurationClient(alias string) (dockerregistryproxyv1.ConfigurationCl
 		return nil, err
 	}
 
-	return raw.(dockerregistryproxyv1.ConfigurationClient), nil
+	return raw.(dockerregistryproxyv1.ConfigurationAPIClient), nil
 }
 
 func ResolvePluginTypeNameAndAlias(config string) (string, string, string, error) {

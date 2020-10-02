@@ -24,14 +24,14 @@ func TestProvide(t *testing.T) {
 	aws.MetadataURL = ts.URL
 	provider := NewProvider()
 	marshalledUsername, err := plugin.MarshalConfigurationValue(
-		dockerregistryproxyv1.ConfigType_STRING,
+		dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 		"_test",
 	)
 	assert.NoError(t, err)
 	_, err = provider.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
 			"username": &dockerregistryproxyv1.ConfigurationAttributeValue{
-				AttributeType: dockerregistryproxyv1.ConfigType_STRING,
+				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Value:         marshalledUsername,
 			},
 		},

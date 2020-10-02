@@ -13,23 +13,23 @@ import (
 
 type ConfigurationGRPCPlugin struct {
 	plugin.Plugin
-	Impl dockerregistryproxyv1.ConfigurationServer
+	Impl dockerregistryproxyv1.ConfigurationAPIServer
 }
 
 func (p *ConfigurationGRPCPlugin) GRPCServer(broker *plugin.GRPCBroker, s *grpc.Server) error {
-	dockerregistryproxyv1.RegisterConfigurationServer(s, p.Impl)
+	dockerregistryproxyv1.RegisterConfigurationAPIServer(s, p.Impl)
 	return nil
 }
 
 func (p *ConfigurationGRPCPlugin) GRPCClient(ctx context.Context, broker *plugin.GRPCBroker, c *grpc.ClientConn) (interface{}, error) {
-	return dockerregistryproxyv1.NewConfigurationClient(c), nil
+	return dockerregistryproxyv1.NewConfigurationAPIClient(c), nil
 }
 
 func MarshalConfigurationValue(t dockerregistryproxyv1.ConfigType, value interface{}) ([]byte, error) {
 	switch t {
-	case dockerregistryproxyv1.ConfigType_STRING:
+	case dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING:
 		return json.Marshal(value.(string))
-	case dockerregistryproxyv1.ConfigType_STRING_SLICE:
+	case dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE:
 		return json.Marshal(value.([]string))
 	}
 	return nil, fmt.Errorf("unsupported type")
@@ -37,11 +37,11 @@ func MarshalConfigurationValue(t dockerregistryproxyv1.ConfigType, value interfa
 
 func UnmarshalConfigurationValue(t dockerregistryproxyv1.ConfigType, value []byte) (interface{}, error) {
 	switch t {
-	case dockerregistryproxyv1.ConfigType_STRING:
+	case dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING:
 		var res string
 		err := json.Unmarshal(value, &res)
 		return res, err
-	case dockerregistryproxyv1.ConfigType_STRING_SLICE:
+	case dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE:
 		var res []string
 		err := json.Unmarshal(value, &res)
 		return res, err
