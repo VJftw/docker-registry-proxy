@@ -15,4 +15,5 @@ go_library(
         "//third_party/go:google_containerregistry",
         "//pkg/cmd",
     ],
+    visibility = ["//cmd/..."],
 )

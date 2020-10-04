@@ -20,6 +20,9 @@ go_get(
         "ptypes",
         "ptypes/duration",
         "ptypes/timestamp",
+        "ptypes/any",
+        "ptypes/struct",
+        "protoc-gen-go/descriptor",
         "ptypes/empty",
         "jsonpb",
     ],
@@ -42,7 +45,13 @@ go_get(
     revision = "release-branch.go1.15",
     install = [
         "http2",
+        "http2/hpack",
         "html",
+        "trace",
+        "context",
+        "internal/timeseries",
+        "http/httpguts",
+        "idna",
     ],
     deps = [":x_text"],
 )
@@ -54,6 +63,7 @@ go_get(
     install = [
         "secure/...",
         "unicode/...",
+        "transform",
     ],
 )
 
@@ -63,6 +73,7 @@ go_get(
     revision = "release-branch.go1.15",
     install = [
         "unix",
+        "internal/unsafeheader",
     ],
 )
 
@@ -80,8 +91,32 @@ go_get(
     get = "google.golang.org/grpc",
     install = [
         "",
+        "attributes",
         "codes",
         "status",
+        "backoff",
+        "balancer",
+        "balancer/base",
+        "balancer/grpclb/state",
+        "connectivity",
+        "internal/...",
+        "resolver",
+        "keepalive",
+        "credentials",
+        "serviceconfig",
+        "balancer/roundrobin",
+        "encoding",
+        "encoding/proto",
+        "metadata",
+        "peer",
+        "stats",
+        "health",
+        "reflection",
+        "health/grpc_health_v1",
+        "grpclog",
+        "tap",
+        "binarylog/grpc_binarylog_v1",
+        "reflection/grpc_reflection_v1alpha",
     ],
     revision = "v1.32.0",
     licences = ["Apache-2.0"],
@@ -93,6 +128,10 @@ go_get(
     get = "github.com/hashicorp/go-plugin",
     revision = "v1.3.0",
     licences = ["MPL-2.0"],
+    install = [
+        "",
+        "internal/plugin",
+    ],
     deps = [
         ":protobuf", 
         ":grpc", 
@@ -122,6 +161,12 @@ go_get(
     name = "fatih_color",
     get = "github.com/fatih/color",
     revision = "v1.9.0",
+    install = [
+        "",
+        "vendor/github.com/mattn/go-colorable",
+        "vendor/github.com/mattn/go-isatty",
+        "vendor/golang.org/x/sys/unix",
+    ],
     licences = ["MIT"],
 )
 
@@ -151,6 +196,12 @@ go_get(
     name = "uber_zap",
     get = "go.uber.org/zap",
     revision = "v1.16.0",
+    install = [
+        "",
+        "zapcore",
+        "buffer",
+        "internal/...",
+    ],
     deps = [":uber_atomic", ":uber_multierr"],
 )
 
@@ -215,6 +266,18 @@ go_get(
 go_get(
     name = "hashicorp_hcl",
     get = "github.com/hashicorp/hcl",
+    install = [
+        "",
+        "hcl/printer",
+        "hcl/ast",
+        "hcl/parser",
+        "hcl/token",
+        "hcl/scanner",
+        "hcl/strconv",
+        "json/scanner",
+        "json/token",
+        "json/parser",
+    ],
     revision = "v1.0.0",
     licences = ["MPL-2.0"],
 )
@@ -244,6 +307,10 @@ go_get(
     name = "spf13_afero",
     get = "github.com/spf13/afero",
     revision = "v1.1.2",
+    install = [
+        "",
+        "mem",
+    ],
     licences = ["Apache-2.0"],
     deps = [":x_text"],
 )
@@ -289,8 +356,10 @@ go_get(
     get = "github.com/grpc-ecosystem/go-grpc-middleware",
     install = [
         "",
-        "logging/zap",
+        "logging",
+        "logging/zap/...",
         "recovery",
+        "tags",
     ],
     revision = "v1.2.2",
     deps = [
@@ -409,8 +478,19 @@ go_get(
     name = "google_containerregistry",
     get = "github.com/google/go-containerregistry",
     install = [
+        "vendor/github.com/docker/cli/cli/config",
+        "vendor/github.com/docker/cli/cli/config/types",
+        "vendor/github.com/docker/cli/cli/config/configfile",
+        "vendor/github.com/docker/cli/cli/config/credentials",
+        "vendor/github.com/docker/docker/pkg/homedir",
+        "vendor/github.com/docker/docker-credential-helpers/client",
+        "vendor/github.com/docker/docker-credential-helpers/credentials",
+        "vendor/github.com/pkg/errors",
         "pkg/authn",
         "pkg/name",
+        "pkg/logs",
+        "pkg/internal/retry",
+        "pkg/internal/retry/wait",
         "pkg/v1/remote/transport",
     ],
     revision = "v0.1.3",
