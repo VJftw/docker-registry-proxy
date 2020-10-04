@@ -299,4 +299,101 @@ go_get(
         ":x_net",
         ":grpc",
     ],
+    licences = ["Apache-2.0"],
+)
+
+go_get(
+    name = "docker",
+    get = "github.com/docker/docker",
+    repo = "github.com/moby/moby",
+    install = [
+        "api/types/...",
+        "client",
+    ],
+    revision = "v19.03.13",
+    licences = ["Apache-2.0"],
+)
+
+go_get(
+    name = "google_cadvisor",
+    get = "github.com/google/cadvisor",
+    install = ["fs"],
+    revision = "v0.37.0",
+    licences = ["Apache-2.0"],
+    deps = [
+        ":mistifyio_zfs",
+        ":k8s_klog",
+        ":k8s_utils",
+    ]
+)
+
+go_get(
+    name = "mistifyio_zfs",
+    get = "github.com/mistifyio/go-zfs",
+    revision = "v1.0.0",
+    licences = ["Apache-2.0"],
+)
+
+go_get(
+    name = "k8s_klog",
+    get = "k8s.io/klog",
+    repo = "github.com/kubernetes/klog",
+    revision = "v2.2.0",
+    licences = ["Apache-2.0"],
+    deps = [":logr"],
+)
+
+go_get(
+    name = "k8s_utils",
+    get = "k8s.io/utils",
+    repo = "github.com/kubernetes/utils",
+    install = [
+        "mount",
+        "exec",
+    ],
+    revision = "2df71ebbae66",
+    licences = ["Apache-2.0"],
+    deps = [":k8s_klog"],
+)
+
+go_get(
+    name = "logr",
+    get = "github.com/go-logr/logr",
+    revision = "v0.2.1",
+    licences = ["Apache-2.0"],
+)
+
+go_get(
+    name = "k8s_cri-api",
+    get = "k8s.io/cri-api",
+    repo = "github.com/kubernetes/cri-api",
+    install = [
+        "pkg/apis/runtime/v1alpha2",
+    ],
+    revision = "v0.19.2",
+    licences = ["Apache-2.0"],
+    deps = [
+        ":grpc",
+        ":gogo_protobuf",
+    ],
+)
+
+go_get(
+    name = "gogo_protobuf",
+    get = "github.com/gogo/protobuf",
+    install = [
+        "gogoproto",
+        "proto",
+        "sortkeys",
+    ],
+    revision = "v1.3.1",
+    licences = ["BSD-3-Clause"],
+)
+
+go_get(
+    name = "docker_distribution",
+    get = "github.com/docker/distribution",
+    install = ["reference"],
+    revision = "v2.7.1",
+    licences = ["Apache-2.0"],
 )
