@@ -397,3 +397,22 @@ go_get(
     revision = "v2.7.1",
     licences = ["Apache-2.0"],
 )
+
+go_get(
+    name = "dgrijalva_jwt",
+    get = "github.com/dgrijalva/jwt-go",
+    revision = "v3.2.0",
+    licences = ["MIT"],
+)
+
+go_get(
+    name = "google_containerregistry",
+    get = "github.com/google/go-containerregistry",
+    install = [
+        "pkg/authn",
+        "pkg/name",
+        "pkg/v1/remote/transport",
+    ],
+    revision = "v0.1.3",
+    licences = ["MIT"],
+)
