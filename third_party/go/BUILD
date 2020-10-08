@@ -515,6 +515,14 @@ go_get(
 )
 
 go_get(
+    name = "mozilla_pkcs7",
+    get = "go.mozilla.org/pkcs7",
+    repo = "github.com/mozilla-services/pkcs7",
+    revision = "432b2356ecb18209c1cec25680b8a23632794f21",
+    licences = ["MIT"],
+)
+
+go_get(
     name = "google_containerregistry",
     get = "github.com/google/go-containerregistry",
     install = [
