@@ -11,4 +11,7 @@ go_library(
         "//third_party/go:k8s_cri-api",
         "//third_party/go:docker_distribution",
     ],
+    visibility = [
+        "//cmd/...",
+    ]
 )
