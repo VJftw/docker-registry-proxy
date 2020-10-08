@@ -1,5 +1,5 @@
 go_library(
-    name = "aws",
+    name = "gcp",
     srcs = [
         "certificate-manager.go",
         "gcp.go",
@@ -11,4 +11,5 @@ go_library(
         "//pkg/cmd",
         "//third_party/go:dgrijalva_jwt",
     ],
+    visibility = ["//plugins/..."],
 )
