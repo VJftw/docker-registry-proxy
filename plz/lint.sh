@@ -1,4 +1,4 @@
 #!/bin/bash
 set -Eeuo pipefail
 
-plz query alltargets //plz/lint/... | plz run sequential -
+./pleasew query alltargets //plz/lint/... | ./pleasew run sequential -
