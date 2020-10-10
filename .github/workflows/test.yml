@@ -14,17 +14,6 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - name: Get dependencies
-        run: go mod vendor
-
-      - name: Lint
-        run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.23.6
-          ./bin/golangci-lint run
-
-      - name: Test
-        run: go test -count 5 -cover ./...
-
       - name: Please build
         run: ./pleasew build
 
