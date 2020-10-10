@@ -18,30 +18,34 @@ import (
 
 const (
 	flagUsername = "username"
+	// HTTPTimeout is the amount of time to wait before a HTTP request should timeout.
+	HTTPTimeout = 5 * time.Second
 )
 
 func main() {
 	plugin.ServeAuthProviderPlugin(NewProvider())
 }
 
-// Provider represents an AuthenticationProvider using GCP Instance Identity Documents
+// Provider represents an AuthenticationProvider using GCP Instance Identity Documents.
 type Provider struct {
 	client   *http.Client
 	username string
 }
 
-// NewProvider returns a new Provider
+// NewProvider returns a new Provider.
 func NewProvider() *Provider {
 	client := &http.Client{
-		Timeout: 5 * time.Second,
+		Timeout: HTTPTimeout,
 	}
 	return &Provider{
 		client: client,
 	}
 }
 
-// GetConfigurationSchema returns the schema for the plugin
-func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
+// GetConfigurationSchema returns the schema for the plugin.
+func (p *Provider) GetConfigurationSchema(_ context.Context, _ *empty.Empty) (
+	*dockerregistryproxyv1.GetConfigurationSchemaResponse, error,
+) {
 	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
 			flagUsername: {
@@ -52,10 +56,16 @@ func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (
 	}, nil
 }
 
-// Configure configures the plugin
-func (p *Provider) Configure(ctx context.Context, req *dockerregistryproxyv1.ConfigureRequest) (*empty.Empty, error) {
+// Configure configures the plugin.
+func (p *Provider) Configure(
+	_ context.Context,
+	req *dockerregistryproxyv1.ConfigureRequest,
+) (*empty.Empty, error) {
 	if val, ok := req.Attributes[flagUsername]; ok {
-		username, err := plugin.UnmarshalConfigurationValue(dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING, val.GetValue())
+		username, err := plugin.UnmarshalConfigurationValue(
+			dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
+			val.GetValue(),
+		)
 		if err != nil {
 			return nil, err
 		}
@@ -65,8 +75,10 @@ func (p *Provider) Configure(ctx context.Context, req *dockerregistryproxyv1.Con
 	return &empty.Empty{}, nil
 }
 
-// Provide returns credentials TODO: cache response from metadata in memory
-func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.ProvideRequest) (*dockerregistryproxyv1.ProvideResponse, error) {
+// Provide returns credentials TODO: cache response from metadata in memory.
+func (p *Provider) Provide(ctx context.Context,
+	_ *dockerregistryproxyv1.ProvideRequest,
+) (*dockerregistryproxyv1.ProvideResponse, error) {
 
 	// tokenReq, _ := http.NewRequest("PUT", aws.ApiToken(), nil)
 	// tokenReq.Header = *aws.TokenHeader
@@ -80,7 +92,7 @@ func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.Provi
 	// 	return nil, fmt.Errorf("could not read token from body: %w", err)
 	// }
 
-	metaReq, _ := http.NewRequest("GET", aws.MetadataIdentity(), nil)
+	metaReq, _ := http.NewRequestWithContext(ctx, "GET", aws.MetadataIdentity(), nil)
 	// metaReq.Header = aws.GetMetadataHeader(string(token))
 
 	metaResp, err := p.client.Do(metaReq)
@@ -94,7 +106,7 @@ func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.Provi
 		return nil, fmt.Errorf("could not read metadata response: %w", err)
 	}
 
-	sigReq, _ := http.NewRequest("GET", aws.MetadataIdentitySignature(), nil)
+	sigReq, _ := http.NewRequestWithContext(ctx, "GET", aws.MetadataIdentitySignature(), nil)
 	// sigReq.Header = aws.GetMetadataHeader(string(token))
 
 	sigResp, err := p.client.Do(sigReq)

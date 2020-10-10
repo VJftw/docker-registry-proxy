@@ -9,7 +9,7 @@ var (
 	// MetadataURL is the endpoint to make requests to fetch instance metadata from
 	MetadataURL = "http://169.254.169.254"
 	Version     = func() string { return fmt.Sprintf("%s/latest", MetadataURL) }
-	ApiToken    = func() string { return fmt.Sprintf("%s/api/token", Version()) }
+	APIToken    = func() string { return fmt.Sprintf("%s/api/token", Version()) }
 
 	MetadataIdentity          = func() string { return fmt.Sprintf("%s/dynamic/instance-identity/document", Version()) }
 	MetadataIdentitySignature = func() string { return fmt.Sprintf("%s/dynamic/instance-identity/pkcs7", Version()) }

@@ -21,8 +21,15 @@ func main() {
 	viper.SetEnvPrefix("kis")
 	rootCmd := cmd.New("kubelet-image-service")
 
-	rootCmd.Flags().StringSlice(flagAuthenticationProviders, []string{}, "The authentication providers in the format `<image_prefix>=<endpoint>`")
-	if err := viper.BindPFlag(flagAuthenticationProviders, rootCmd.Flags().Lookup(flagAuthenticationProviders)); err != nil {
+	rootCmd.Flags().StringSlice(
+		flagAuthenticationProviders,
+		[]string{},
+		"The authentication providers in the format `<image_prefix>=<endpoint>`",
+	)
+	if err := viper.BindPFlag(
+		flagAuthenticationProviders,
+		rootCmd.Flags().Lookup(flagAuthenticationProviders),
+	); err != nil {
 		cmd.HandleErr(err)
 	}
 	grpcServer := cmd.NewGRPCServer()
@@ -43,7 +50,10 @@ func main() {
 	cmd.Execute(rootCmd, grpcServer, preFunc)
 }
 
-func parseAuthenticationProviderClients() (map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient, error) {
+func parseAuthenticationProviderClients() (
+	map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient,
+	error,
+) {
 	res := map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient{}
 	confs := viper.GetStringSlice(flagAuthenticationProviders)
 	for _, conf := range confs {

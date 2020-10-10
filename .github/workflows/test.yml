@@ -27,6 +27,9 @@ jobs:
 
       - name: Please build
         run: ./pleasew build
+
+      - name: Please lint
+        run: ./pleasew lint
       
       - name: Please test
         run: ./pleasew test

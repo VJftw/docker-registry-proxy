@@ -20,7 +20,7 @@ import (
 )
 
 func genTestKey() *rsa.PrivateKey {
-	key, _ := rsa.GenerateKey(rand.Reader, 1024)
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
 	return key
 }
 
@@ -73,7 +73,7 @@ func TestVerify(t *testing.T) {
 	defer func() {
 		aws.AWSCertificates = backupAWSCerts
 	}()
-	block, _ := pem.Decode([]byte(pemCert))
+	block, _ := pem.Decode(pemCert)
 	cert, err := x509.ParseCertificate(block.Bytes)
 	assert.NoError(t, err)
 	err = toBeSigned.AddSigner(cert, key, pkcs7.SignerInfoConfig{})

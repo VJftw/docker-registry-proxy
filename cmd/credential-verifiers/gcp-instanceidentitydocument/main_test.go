@@ -23,7 +23,7 @@ import (
 )
 
 func genTestKey() *rsa.PrivateKey {
-	key, _ := rsa.GenerateKey(rand.Reader, 1024)
+	key, _ := rsa.GenerateKey(rand.Reader, 2048)
 	return key
 }
 

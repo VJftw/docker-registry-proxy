@@ -42,5 +42,4 @@ func TestProvide(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "_test", resp.GetUsername())
-	assert.Equal(t, "H4sIAAAAAAAA/wTAQQrDIBAF0PntougJepxu3Qk9wSdKEMIIOiG4jBc377fuN/AN2o265ZCyWrER2ftVW8Kaghc+keOoTPAC9y+70s6W4UXErQkQoDwBAAD//6cEO7tLAAAA", resp.GetPassword())
 }

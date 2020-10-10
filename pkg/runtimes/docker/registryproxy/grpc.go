@@ -24,7 +24,7 @@ func RegistryAuthResolveGRPC(client dockerregistryproxyv1.AuthenticationProvider
 		RegistryToken: resp.GetRegistryToken(),
 	}
 
-	logger.Info("recieved credentials from auth provider", zap.String("credentials", fmt.Sprintf("%#v", cfg)))
+	logger.Info("received credentials from auth provider", zap.String("credentials", fmt.Sprintf("%#v", cfg)))
 
 	return authn.FromConfig(cfg), nil
 }

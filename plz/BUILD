@@ -1,4 +1,5 @@
-sh_binary(
-    name="setup",
-    main="setup.sh",
-)
+for script in glob(["*.sh"]):
+    sh_binary(
+        name=basename(script).split(".")[0],
+        main=script,
+    )

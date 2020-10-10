@@ -41,7 +41,7 @@ func NewProvider() *Provider {
 
 // Provide returns credentials TODO: cache response from metadata in memory
 func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.ProvideRequest) (*dockerregistryproxyv1.ProvideResponse, error) {
-	metaReq, err := http.NewRequest("GET", gcp.MetadataToken(), nil)
+	metaReq, err := http.NewRequestWithContext(ctx, "GET", gcp.MetadataToken(), nil)
 	if err != nil {
 		return nil, fmt.Errorf("could not construct metadata request: %w", err)
 	}

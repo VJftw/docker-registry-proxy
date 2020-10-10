@@ -15,3 +15,9 @@ Language = go
 
 [alias "setup"]
 cmd = run //plz:setup
+
+[alias "fmt"]
+cmd = run //plz:fmt
+
+[alias "lint"]
+cmd = run //plz:lint

@@ -4,9 +4,8 @@ sh_cmd(
     set -e
     dirs=$(plz query alltargets --include=grpc | cut -f1 -d":" | cut -c 3-)
     for dir in \\\$dirs; do
-        set -x; 
-        $(out_location //third_party/lang:prototool) lint \\\$dirs
-        set +x;
+        echo "-> Linting proto files in \\\$dir"
+        $(out_location //third_party/lang:prototool) lint \\\$dir
     done
     """,
     data = ["//third_party/lang:prototool"],
@@ -16,10 +15,9 @@ sh_cmd(
     name = "go",
     cmd = """
     set -e
-    set -x;
     dirs="$(plz query alltargets --include=go | grep -v third_party | cut -f1 -d":" | cut -c 3- | xargs)"
-    $(out_location //third_party/lang:golang_ci_lint) run --enable-all \\\$dirs
-    set +x;
+    echo "-> Linting go files"
+    $(out_location //third_party/lang:golang_ci_lint) run \\\$dirs
     """,
     data = ["//third_party/lang:golang_ci_lint"],
 )
