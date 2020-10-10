@@ -11,5 +11,8 @@ go_library(
         "//pkg/cmd",
         "//third_party/go:dgrijalva_jwt",
     ],
-    visibility = ["//plugins/..."],
+    visibility = [
+        "//cmd/credential-providers/...",
+        "//cmd/credential-verifiers/...",
+    ],
 )

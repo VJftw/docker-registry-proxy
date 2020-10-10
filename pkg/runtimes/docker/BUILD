@@ -12,6 +12,6 @@ go_library(
         "//third_party/go:docker_distribution",
     ],
     visibility = [
-        "//cmd/...",
+        "//cmd/clients/...",
     ]
 )

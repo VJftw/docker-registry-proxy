@@ -6,5 +6,8 @@ go_library(
         "instanceidentitydocument-verifier.go",
         "metadata.go",
     ],
-    visibility = ["//plugins/..."],
+    visibility = [
+        "//cmd/credential-providers/...",
+        "//cmd/credential-verifiers/...",
+    ],
 )
