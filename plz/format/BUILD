@@ -1,6 +1,7 @@
 sh_cmd(
     name = "proto",
     cmd = """
+echo "-> Formating proto files"
 dirs=$(plz query alltargets --include=grpc | cut -f1 -d":" | cut -c 3-)
 for dir in \\\$dirs; do
     $(out_location //third_party/lang:prototool) format -fw \\\$dirs
@@ -12,9 +13,9 @@ done
 sh_cmd(
     name = "go",
     cmd = """
-set -e
+set -e;
 dirs="$(plz query alltargets --include=go | grep -v third_party | cut -f1 -d":" | cut -c 3- | xargs)"
-set -x;
+echo "-> Formating go files"
 $(out_location //third_party/lang:gofmt) -s -w \\\$dirs
     """,
     data = ["//third_party/lang:gofmt"],
