@@ -146,7 +146,7 @@ func (s *ImageService) ImageFsInfo(ctx context.Context, _ *runtimeapi.ImageFsInf
 	}
 	return &runtimeapi.ImageFsInfoResponse{
 		ImageFilesystems: []*runtimeapi.FilesystemUsage{
-			&runtimeapi.FilesystemUsage{
+			{
 				Timestamp:  time.Now().UnixNano(),
 				FsId:       &runtimeapi.FilesystemIdentifier{Mountpoint: info.DockerRootDir},
 				UsedBytes:  &runtimeapi.UInt64Value{Value: usageInfo.Bytes},

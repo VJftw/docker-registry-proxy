@@ -1,0 +1,4 @@
+#!/bin/bash
+
+./pleasew run //plz/format:proto
+./pleasew run //plz/format:go

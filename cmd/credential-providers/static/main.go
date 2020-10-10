@@ -39,11 +39,11 @@ func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.Provi
 func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
 	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
-			flagUsername: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagUsername: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Description:   "the static username",
 			},
-			flagPassword: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagPassword: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Description:   "the static password",
 			},

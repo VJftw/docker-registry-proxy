@@ -7,8 +7,8 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
 	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/stretchr/testify/assert"
 )
@@ -30,7 +30,7 @@ func TestProvide(t *testing.T) {
 	assert.NoError(t, err)
 	_, err = provider.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
-			"username": &dockerregistryproxyv1.ConfigurationAttributeValue{
+			"username": {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Value:         marshalledUsername,
 			},

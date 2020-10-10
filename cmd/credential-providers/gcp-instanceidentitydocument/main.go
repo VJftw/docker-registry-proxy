@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
 	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/golang/protobuf/ptypes/empty"
 )
@@ -76,11 +76,11 @@ func (p *Provider) Provide(ctx context.Context, req *dockerregistryproxyv1.Provi
 func (p *Provider) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
 	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
-			flagUsername: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagUsername: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Description:   "the routing username to provide credentials",
 			},
-			flagAudience: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagAudience: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING,
 				Description:   "the aud in the signed JWT",
 			},

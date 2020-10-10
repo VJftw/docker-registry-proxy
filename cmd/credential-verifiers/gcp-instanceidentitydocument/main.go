@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
 	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/golang/protobuf/ptypes/empty"
 )
@@ -50,23 +50,23 @@ func NewVerifier() *Verifier {
 func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
 	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
-			flagAudiences: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagAudiences: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the audiences to accept",
 			},
-			flagProjectIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagProjectIDs: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the project IDs to accept",
 			},
-			flagProjectNumbers: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagProjectNumbers: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the project numbers to accept",
 			},
-			flagZones: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagZones: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the zones to accept",
 			},
-			flagLicenseIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagLicenseIDs: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the license IDs to accept",
 			},

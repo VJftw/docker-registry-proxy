@@ -8,8 +8,8 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
 	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	"github.com/VJftw/docker-registry-proxy/pkg/auth/aws"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/golang/protobuf/ptypes/empty"
 	"go.mozilla.org/pkcs7"
@@ -64,27 +64,27 @@ func NewVerifier() *Verifier {
 func (v *Verifier) GetConfigurationSchema(ctx context.Context, _ *empty.Empty) (*dockerregistryproxyv1.GetConfigurationSchemaResponse, error) {
 	return &dockerregistryproxyv1.GetConfigurationSchemaResponse{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttribute{
-			flagAvailabilityZones: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagAvailabilityZones: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the availability zones to accept",
 			},
-			flagPrivateIPs: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagPrivateIPs: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the private IPs to accept",
 			},
-			flagInstanceIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagInstanceIDs: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the instance IDs to accept",
 			},
-			flagAccountIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagAccountIDs: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the account IDs to accept",
 			},
-			flagImageIDs: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagImageIDs: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the image IDs to accept",
 			},
-			flagRegions: &dockerregistryproxyv1.ConfigurationAttribute{
+			flagRegions: {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Description:   "the regions to accept",
 			},

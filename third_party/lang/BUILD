@@ -1,6 +1,7 @@
 package(default_visibility = ["PUBLIC"])
 subinclude(
-    "//third_party/defs:go_tool",
+    "//plz/defs:go_tool",
+    # "//third_party/defs:go_tool",
     "//third_party/defs:protoc",
 )
 

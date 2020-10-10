@@ -15,8 +15,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
 	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
+	"github.com/VJftw/docker-registry-proxy/pkg/auth/gcp"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/dgrijalva/jwt-go"
 	"github.com/stretchr/testify/assert"
@@ -85,7 +85,7 @@ func TestVerify(t *testing.T) {
 	assert.NoError(t, err)
 	_, err = verifier.Configure(context.Background(), &dockerregistryproxyv1.ConfigureRequest{
 		Attributes: map[string]*dockerregistryproxyv1.ConfigurationAttributeValue{
-			"zones": &dockerregistryproxyv1.ConfigurationAttributeValue{
+			"zones": {
 				AttributeType: dockerregistryproxyv1.ConfigType_CONFIG_TYPE_STRING_SLICE,
 				Value:         marshalledZones,
 			},

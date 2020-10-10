@@ -12,3 +12,6 @@ ProtocGoPlugin = //third_party/go:protoc-gen-go
 GoDep = //third_party/go:protobuf
 GoGrpcDep = //third_party/go:grpc
 Language = go
+
+[alias "setup"]
+cmd = run //plz:setup
