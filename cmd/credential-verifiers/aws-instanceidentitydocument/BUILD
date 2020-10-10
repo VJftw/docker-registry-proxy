@@ -9,3 +9,18 @@ go_binary(
         "//third_party/go:mozilla_pkcs7",
     ],
 )
+
+go_test(
+    name = "gcp-instanceidentitydocument_test",
+    srcs = [
+        "main.go",
+        "main_test.go",
+    ],
+    deps = [
+        "//third_party/go:stretchr_testify",
+        "//api/proto/v1",
+        "//pkg/auth/aws",
+        "//pkg/plugin",
+        "//third_party/go:mozilla_pkcs7",
+    ],
+)

@@ -544,3 +544,42 @@ go_get(
     revision = "v0.1.3",
     licences = ["MIT"],
 )
+
+go_get(
+    name = "stretchr_testify",
+    get = "github.com/stretchr/testify",
+    install = [
+        "assert", 
+        "require",
+    ],
+    revision = "v1.6.1",
+    licences = ["MIT"],
+    deps = [
+        ":davecgh_spew",
+        ":pmezard_difflib",
+        ":yaml_v3",
+    ],
+)
+
+go_get(
+    name = "davecgh_spew",
+    get = "github.com/davecgh/go-spew",
+    install = ["spew"],
+    revision = "v1.1.1",
+    licences = ["MIT"],
+)
+
+go_get(
+    name = "pmezard_difflib",
+    get = "github.com/pmezard/go-difflib",
+    install = ["difflib"],
+    revision = "v1.0.0",
+    licences = ["ISC"],
+)
+
+go_get(
+    name = "yaml_v3",
+    get = "gopkg.in/yaml.v3",
+    revision = "v3",
+    licences = ["Apache-2.0", "MIT"],
+)

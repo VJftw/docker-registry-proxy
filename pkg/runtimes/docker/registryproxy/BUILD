@@ -17,3 +17,15 @@ go_library(
     ],
     visibility = ["//cmd/..."],
 )
+
+go_test(
+    name = "registryproxy_test",
+    srcs = [
+        "handler_test.go",
+    ],
+    deps = [
+        ":registryproxy",
+        "//third_party/go:stretchr_testify",
+    ],
+    external = True,
+)

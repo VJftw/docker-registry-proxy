@@ -11,3 +11,15 @@ go_library(
         "//cmd/credential-verifiers/...",
     ],
 )
+
+go_test(
+    name = "aws_test",
+    srcs = [
+        "instanceidentitydocument-provider_test.go",
+    ],
+    deps = [
+        ":aws",
+        "//third_party/go:stretchr_testify",
+    ],
+    external = True,
+)

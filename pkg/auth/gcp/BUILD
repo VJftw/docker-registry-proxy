@@ -16,3 +16,15 @@ go_library(
         "//cmd/credential-verifiers/...",
     ],
 )
+
+go_test(
+    name = "gcp_test",
+    srcs = [
+        "certificate-manager_test.go",
+    ],
+    deps = [
+        ":gcp",
+        "//third_party/go:stretchr_testify",
+    ],
+    external = True,
+)

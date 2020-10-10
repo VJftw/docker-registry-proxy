@@ -15,3 +15,17 @@ go_library(
         "//cmd/clients/...",
     ]
 )
+
+go_test(
+    name = "docker_test",
+    srcs = [
+        "image-util_test.go",
+    ],
+    deps = [
+        ":docker",
+        "//api/proto/v1",
+        "//third_party/go:stretchr_testify",
+        "//third_party/go:grpc",
+    ],
+    external = True,
+)
