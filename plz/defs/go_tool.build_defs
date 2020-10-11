@@ -1,0 +1,61 @@
+"""Build rule to obtain a self-contained Golang distribution
+
+This downloads the desired Golang version (with given hash) from golang.org outputs the 
+`go` tool which can be referenced to in .plzconfig via `go.gotool`.
+"""
+
+def go_tool(
+    name: str,
+    version: str,
+    hashes: list = [],
+):
+    """Generates a Go Tool rule
+
+    Args:
+        name (str): Name of the rule.
+        version (str): The Go version to use. e.g. '1.15.2'
+        hashes (list): A list of hashes to validate the archive against. Can be obtained from: https://golang.org/dl/
+    """
+    download_rule=remote_file(
+        name = f"_{name}#download",
+        url = "https://golang.org/dl/go%s.linux-amd64.tar.gz" % version,
+        hashes = hashes,
+    )
+
+    goroot_rule=genrule(
+        name = f"_{name}#goroot",
+        srcs = [download_rule],
+        cmd = "tar -xzf $SRCS",
+        outs = ["go/"],
+    )
+    
+    genrule(
+        name = f"{name}fmt",
+        srcs = [goroot_rule],
+        outs = [f"{name}fmt-{version}.sh"],
+        binary = True,
+        cmd = _get_cmd(goroot_rule, "gofmt"),
+    )
+
+    return genrule(
+        name = name,
+        srcs = [goroot_rule],
+        outs = [f"{name}-{version}.sh"],
+        binary = True,
+        cmd = _get_cmd(goroot_rule, "go"),
+    )
+
+def _get_cmd(goroot_rule: str, binary: str):
+    return f"""
+absolute_repo_path=$(pwd | sed 's#plz-out/.*##g')
+go_root=$(out_location {goroot_rule})
+absolute_go_root="${{absolute_repo_path}}${{go_root}}"
+absolute_go_bin="${{absolute_go_root}}/bin/{binary}"
+
+cat <<EOF >> $OUTS
+#!/bin/bash
+set -Eeuo pipefail
+export GOROOT="${{absolute_go_root}}"
+${{absolute_go_bin}} "\\\$@"
+EOF
+"""

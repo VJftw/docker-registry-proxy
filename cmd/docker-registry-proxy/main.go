@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"strings"
 
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/cmd"
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
 	"github.com/VJftw/docker-registry-proxy/pkg/plugin"
 	"github.com/VJftw/docker-registry-proxy/pkg/runtimes/docker/registryproxy"
 	"github.com/spf13/viper"
@@ -41,7 +41,7 @@ func main() {
 
 	httpServer := cmd.NewHTTPServer()
 	preFunc := func() error {
-		var upstreamAuthService v1.AuthenticationProviderClient
+		var upstreamAuthService dockerregistryproxyv1.AuthenticationProviderAPIClient
 		if upstreamAuth := viper.GetString(flagUpstreamAuthenticationService); upstreamAuth != "" {
 			uAS, err := plugin.GetAuthProviderClient(upstreamAuth)
 			if err != nil {
@@ -69,8 +69,8 @@ func main() {
 	cmd.Execute(rootCmd, httpServer, preFunc)
 }
 
-func parseAuthenticationVerifierClients() (map[string]v1.AuthenticationVerifierClient, error) {
-	res := map[string]v1.AuthenticationVerifierClient{}
+func parseAuthenticationVerifierClients() (map[string]dockerregistryproxyv1.AuthenticationVerifierAPIClient, error) {
+	res := map[string]dockerregistryproxyv1.AuthenticationVerifierAPIClient{}
 	confs := viper.GetStringSlice(flagAuthenticationVerifiers)
 	for _, conf := range confs {
 		parts := strings.Split(conf, ":")

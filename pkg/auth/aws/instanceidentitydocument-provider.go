@@ -49,8 +49,9 @@ func (iip *InstanceIdentityPassword) Decode(s string) error {
 	if err != nil {
 		return fmt.Errorf("could not create gzip decompressor: %w", err)
 	}
+	limitedDecomp := io.LimitReader(decomp, 2*1024*1024)
 	decodedPassword := &bytes.Buffer{}
-	_, err = io.Copy(decodedPassword, decomp)
+	_, err = io.Copy(decodedPassword, limitedDecomp)
 	if err != nil {
 		return fmt.Errorf("could not copy decompressed bytes: :%w", err)
 	}

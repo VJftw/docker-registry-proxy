@@ -1,0 +1,30 @@
+linters:
+  enable:
+    - bodyclose
+    - noctx
+    - golint
+    - gosec
+    - interfacer
+    - unconvert
+    # - dupl
+    - goconst
+    - gocyclo
+    - gocognit
+    - asciicheck
+    - gofmt
+    - goimports
+    - maligned
+    - misspell
+    # - lll
+    # - unparam
+    - dogsled
+    - prealloc
+    # - scopelint
+    - gocritic
+    # - gochecknoinits
+    # - gochecknoglobals
+    # - godox
+    # - funlen
+    # - gomnd
+    # - godot
+    # - testpackage

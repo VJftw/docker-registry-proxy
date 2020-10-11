@@ -1,6 +1,7 @@
 package gcp
 
 import (
+	"context"
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/json"
@@ -21,6 +22,8 @@ type CertificateManager struct {
 	Certificates      map[string]*rsa.PublicKey
 	certificatesMutex sync.Mutex
 
+	client *http.Client
+
 	closeCh chan struct{}
 }
 
@@ -37,6 +40,7 @@ func NewCertificateManager() *CertificateManager {
 	return &CertificateManager{
 		closeCh:      make(chan struct{}),
 		Certificates: map[string]*rsa.PublicKey{},
+		client:       &http.Client{Timeout: 5 * time.Second},
 	}
 }
 
@@ -66,10 +70,21 @@ func (cM *CertificateManager) Run(wg *sync.WaitGroup) {
 
 	for {
 		cM.certificatesMutex.Lock()
-		resp, err := http.Get(GoogleOAuth2CertsURL)
+		// #nosec G107
+		req, err := http.NewRequestWithContext(
+			context.Background(),
+			"GET",
+			GoogleOAuth2CertsURL,
+			nil,
+		)
+		if err != nil {
+			logger.Error("could not make Google OAuth2 certs request", zap.Error(err))
+		}
+		resp, err := cM.client.Do(req)
 		if err != nil {
 			logger.Error("could not retrieve Google OAuth2 certs", zap.Error(err))
 		}
+		defer resp.Body.Close()
 
 		var resCerts RespCertificates
 		err = json.NewDecoder(resp.Body).Decode(&resCerts)

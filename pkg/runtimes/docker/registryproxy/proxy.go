@@ -7,7 +7,7 @@ import (
 	"net/http/httputil"
 	"net/url"
 
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/google/go-containerregistry/pkg/authn"
 	"github.com/google/go-containerregistry/pkg/name"
 	"github.com/google/go-containerregistry/pkg/v1/remote/transport"
@@ -26,7 +26,7 @@ type ProxyOpts struct {
 	Auth      authn.Authenticator
 	Transport http.RoundTripper
 
-	AuthVerifiers map[string]v1.AuthenticationVerifierClient
+	AuthVerifiers map[string]dockerregistryproxyv1.AuthenticationVerifierAPIClient
 
 	TokenHMAC []byte
 }
@@ -34,8 +34,8 @@ type ProxyOpts struct {
 // GetProxyOpts validates and returns the given proxy handler options
 func GetProxyOpts(
 	upstreamAddr string,
-	upstreamAuthClient v1.AuthenticationProviderClient,
-	authVerifiers map[string]v1.AuthenticationVerifierClient,
+	upstreamAuthClient dockerregistryproxyv1.AuthenticationProviderAPIClient,
+	authVerifiers map[string]dockerregistryproxyv1.AuthenticationVerifierAPIClient,
 ) (*ProxyOpts, error) {
 
 	opts := &ProxyOpts{

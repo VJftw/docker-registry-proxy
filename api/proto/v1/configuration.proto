@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package vjftw.dockerregistryproxy.v1;
+
+option csharp_namespace = "Vjftw.Dockerregistryproxy.V1";
+option go_package = "dockerregistryproxyv1";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigurationProto";
+option java_package = "com.vjftw.dockerregistryproxy.v1";
+option objc_class_prefix = "VDX";
+option php_namespace = "Vjftw\\Dockerregistryproxy\\V1";
+
+// ConfigType represents the available field types from:
+// https://github.com/spf13/viper#getting-values-from-viper
+enum ConfigType {
+  CONFIG_TYPE_INVALID = 0;
+  CONFIG_TYPE_BOOL = 1;
+  CONFIG_TYPE_FLOAT64 = 2;
+  CONFIG_TYPE_INT = 3;
+  CONFIG_TYPE_INT_SLICE = 4;
+  CONFIG_TYPE_STRING = 5;
+  CONFIG_TYPE_STRING_MAP = 6;
+  CONFIG_TYPE_STRING_SLICE = 7;
+  CONFIG_TYPE_TIME = 8;
+  CONFIG_TYPE_DURATION = 9;
+}
+
+// ConfigurationAttribute represents a configuration attribute for a plugin.
+message ConfigurationAttribute {
+  ConfigType attribute_type = 1;
+  string description = 2;
+}
+
+// ConfigurationAttributeValue represents the value of a configuration attribute for a plugin.
+message ConfigurationAttributeValue {
+  ConfigType attribute_type = 1;
+  bytes value = 2;
+}

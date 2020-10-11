@@ -9,7 +9,7 @@ import (
 	"os"
 	"time"
 
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/docker/docker/api/types"
 	"github.com/google/cadvisor/fs"
 
@@ -21,11 +21,11 @@ import (
 type ImageService struct {
 	client *dockerclient.Client
 
-	authProviders map[string]v1.AuthenticationProviderClient
+	authProviders map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient
 }
 
 // NewImageService returns a new instance of the Docker Image Service with the given authentication providers
-func NewImageService(authProviders map[string]v1.AuthenticationProviderClient) (*ImageService, error) {
+func NewImageService(authProviders map[string]dockerregistryproxyv1.AuthenticationProviderAPIClient) (*ImageService, error) {
 	client, err := dockerclient.NewClientWithOpts()
 	if err != nil {
 		return nil, fmt.Errorf("could not create new docker client: %w", err)
@@ -91,7 +91,7 @@ func (s *ImageService) PullImage(ctx context.Context, req *runtimeapi.PullImageR
 		log.Println(err) // Only warn for images that may not need authentication
 	}
 	if authProvider != nil {
-		authResp, err := authProvider.Provide(ctx, &v1.ProvideRequest{})
+		authResp, err := authProvider.Provide(ctx, &dockerregistryproxyv1.ProvideRequest{})
 		if err != nil {
 			return nil, err
 		}
@@ -146,7 +146,7 @@ func (s *ImageService) ImageFsInfo(ctx context.Context, _ *runtimeapi.ImageFsInf
 	}
 	return &runtimeapi.ImageFsInfoResponse{
 		ImageFilesystems: []*runtimeapi.FilesystemUsage{
-			&runtimeapi.FilesystemUsage{
+			{
 				Timestamp:  time.Now().UnixNano(),
 				FsId:       &runtimeapi.FilesystemIdentifier{Mountpoint: info.DockerRootDir},
 				UsedBytes:  &runtimeapi.UInt64Value{Value: usageInfo.Bytes},

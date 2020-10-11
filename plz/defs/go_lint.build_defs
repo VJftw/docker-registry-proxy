@@ -1,0 +1,43 @@
+
+
+def go_lib(
+    name: str,
+    srcs: list,
+    asm_srcs: list=[],
+    hdrs: list=[],
+    out: str="",
+    deps: list=[],
+    visibility: list=[],
+    test_only: bool=False,
+    complete: bool=False,
+    cover: bool=True,
+    filter_srcs: bool=False,
+    import_path: str="",
+    labels: list=[],
+):
+
+    lib_rule=go_library(
+        name=name,
+        srcs=srcs,
+        asm_srcs=asm_srcs,
+        hdrs=hdrs,
+        out=out,
+        deps=deps,
+        visibility=visibility,
+        test_only=test_only,
+        complete=complete,
+        cover=cover,
+        filter_srcs=filter_srcs,
+        import_path=import_path,
+        labels=labels,
+    )
+
+    gentest(
+        name=f"{name}_lint",
+        data=srcs,
+        test_cmd="""
+        set -x;
+        $TOOLS run --verbose --out-format junit-xml $DATA
+        """,
+        test_tools=["//third_party/lang:go_lint"],
+    )

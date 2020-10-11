@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package vjftw.dockerregistryproxy.v1;
+
+option csharp_namespace = "Vjftw.Dockerregistryproxy.V1";
+option go_package = "dockerregistryproxyv1";
+option java_multiple_files = true;
+option java_outer_classname = "AuthenticationProviderApiProto";
+option java_package = "com.vjftw.dockerregistryproxy.v1";
+option objc_class_prefix = "VDX";
+option php_namespace = "Vjftw\\Dockerregistryproxy\\V1";
+
+// AuthenticationProviderAPI represents a service that provides authentication
+// credentials. This is used by the Kubelet Image Service.
+service AuthenticationProviderAPI {
+  // Provide returns credentials for the given ProvideRequest.
+  rpc Provide(ProvideRequest) returns (ProvideResponse);
+}
+
+// ProvideRequest represents a message for an AuthenticationProvider to return
+// credentials for.
+message ProvideRequest {
+  // host represents the host of the image that the docker client is attempting
+  // to pull. e.g. docker-proxy.example.org
+  string host = 1;
+  // repository represents the repository of the image that the docker client is
+  // attempting to pull. e.g. my-repository
+  string repository = 2;
+  // image represents the image that the docker client is attempting to pull.
+  // e.g. my-image:latest or my-image@sha256:digest
+  string image = 3;
+}
+
+// ProvideResponse represents the returned credentials.
+message ProvideResponse {
+  // Inlined what we use from github.com/cli/cli/config/types
+  string username = 1;
+  string password = 2;
+  string auth = 3;
+  // IdentityToken is used to authenticate the user and get
+  // an access token for the registry.
+  string identity_token = 4;
+  // RegistryToken is a bearer token to be sent to a registry
+  string registry_token = 5;
+}

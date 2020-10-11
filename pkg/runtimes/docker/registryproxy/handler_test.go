@@ -4,7 +4,7 @@ import (
 	"testing"
 
 	"github.com/VJftw/docker-registry-proxy/pkg/runtimes/docker/registryproxy"
-	"gotest.tools/assert"
+	"github.com/stretchr/testify/assert"
 )
 
 func TestGetPathWithBase(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"os/exec"
 	"strings"
 
-	v1 "github.com/VJftw/docker-registry-proxy/pkg/genproto/v1"
+	dockerregistryproxyv1 "github.com/VJftw/docker-registry-proxy/api/proto/v1"
 	"github.com/hashicorp/go-plugin"
 )
 
@@ -64,7 +64,7 @@ func LoadPluginsFromConfigSlice(configs []string) error {
 	return nil
 }
 
-func GetAuthProviderClient(alias string) (v1.AuthenticationProviderClient, error) {
+func GetAuthProviderClient(alias string) (dockerregistryproxyv1.AuthenticationProviderAPIClient, error) {
 	if _, ok := PluginClients[alias]; !ok {
 		return nil, fmt.Errorf("plugin for alias '%s' is not loaded", alias)
 	}
@@ -80,10 +80,10 @@ func GetAuthProviderClient(alias string) (v1.AuthenticationProviderClient, error
 		return nil, err
 	}
 
-	return raw.(v1.AuthenticationProviderClient), nil
+	return raw.(dockerregistryproxyv1.AuthenticationProviderAPIClient), nil
 }
 
-func GetAuthVerifierClient(alias string) (v1.AuthenticationVerifierClient, error) {
+func GetAuthVerifierClient(alias string) (dockerregistryproxyv1.AuthenticationVerifierAPIClient, error) {
 	if _, ok := PluginClients[alias]; !ok {
 		return nil, fmt.Errorf("plugin for alias '%s' is not loaded", alias)
 	}
@@ -99,10 +99,10 @@ func GetAuthVerifierClient(alias string) (v1.AuthenticationVerifierClient, error
 		return nil, err
 	}
 
-	return raw.(v1.AuthenticationVerifierClient), nil
+	return raw.(dockerregistryproxyv1.AuthenticationVerifierAPIClient), nil
 }
 
-func GetConfigurationClient(alias string) (v1.ConfigurationClient, error) {
+func GetConfigurationAPIClient(alias string) (dockerregistryproxyv1.ConfigurationAPIClient, error) {
 	if _, ok := PluginClients[alias]; !ok {
 		return nil, fmt.Errorf("plugin for alias '%s' is not loaded", alias)
 	}
@@ -118,7 +118,7 @@ func GetConfigurationClient(alias string) (v1.ConfigurationClient, error) {
 		return nil, err
 	}
 
-	return raw.(v1.ConfigurationClient), nil
+	return raw.(dockerregistryproxyv1.ConfigurationAPIClient), nil
 }
 
 func ResolvePluginTypeNameAndAlias(config string) (string, string, string, error) {

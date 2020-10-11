@@ -54,3 +54,28 @@ $ go run cmd/docker-registry-proxy/main.go \
   --upstream_repository="https://index.docker.io" \
   --authentication_verifiers="_gcp=tcp://:8890"
 ```
+
+
+## TODO
+Restructure:
+```
+/: docker registry proxy
+/pkg|cmd|build|deployments: docker registry proxy related
+/api/proto/v1: protobuf
+
+/credential-verifiers: verifier plugins for the docker registry proxy
+/credential-verifiers/instance-identity-document-aws AWS instance identity document
+/credential-verifiers/instance-identity-document-gcp: GCP instance identity document
+
+/clients: clients
+/clients/kubelet-image-service: kubelet image service
+/clients/kubelet-image-service/pkg|cmd|build|deplyments: kubelet image service related
+
+/credential-sources: credential sources for clients and the docker registry proxy
+/credential-sources/gcp-token
+/credential-sources/static
+/credential-sources/instance-identity-document-aws
+/credential-sources/instance-identity-document-gcp
+
+/docs
+```

@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+package vjftw.dockerregistryproxy.v1;
+
+option csharp_namespace = "Vjftw.Dockerregistryproxy.V1";
+option go_package = "dockerregistryproxyv1";
+option java_multiple_files = true;
+option java_outer_classname = "ConfigurationApiProto";
+option java_package = "com.vjftw.dockerregistryproxy.v1";
+option objc_class_prefix = "VDX";
+option php_namespace = "Vjftw\\Dockerregistryproxy\\V1";
+
+import "api/proto/v1/configuration.proto";
+
+// ConfigurationAPI represents a way for plugins to express their available configuration options and set them.
+service ConfigurationAPI {
+  // GetConfigurationSchema returns the schema for the plugin.
+  rpc GetConfigurationSchema(GetConfigurationSchemaRequest) returns (GetConfigurationSchemaResponse);
+  // Configure configures the plugin.
+  rpc Configure(ConfigureRequest) returns (ConfigureResponse);
+}
+
+// GetConfigurationSchemaRequest is empty.
+message GetConfigurationSchemaRequest {}
+
+// GetConfigurationSchema represents the configuration for a plugin.
+message GetConfigurationSchemaResponse {
+  // key is the attribute name.
+  map<string, ConfigurationAttribute> attributes = 1;
+}
+
+message ConfigureRequest {
+  map<string, ConfigurationAttributeValue> attributes = 1;
+}
+
+message ConfigureResponse {}
