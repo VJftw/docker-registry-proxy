@@ -7,14 +7,14 @@ fi
 
 version=$(git describe --always)
 
-docker_rules=$(plz query alltargets --include docker-build //...)
+docker_rules=$(./pleasew query alltargets --include docker-build //...)
 
 fqns_to_push=()
 
 export DOCKER_BUILDKIT=1
 for rule in ${docker_rules}; do
-  plz run "${rule}_load"
-  fqn=$(cat $(plz build "${rule}_fqn" | tail -n1 | tr -s " "))
+  ./pleasew run "${rule}_load"
+  fqn=$(cat $(./pleasew build "${rule}_fqn" | tail -n1 | tr -s " "))
   repo="$(echo "${fqn}" | cut -f1 -d\:)"
   fqn_version="${repo}:${version}"
   echo ""
