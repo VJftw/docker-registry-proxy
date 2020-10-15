@@ -40,7 +40,6 @@ for asset in ${assets}; do
   asset_name="${asset//plz-out\/bin\/cmd\//}"
   asset_name=$(dirname "${asset_name}")
   asset_name="${asset_name//\//_}"
-  echo "${asset_name}: ${asset}"
   asset_resp=$(curl \
   --header "Accept: ${github_api_version}" \
   --header "Authorization: token ${GITHUB_TOKEN}" \

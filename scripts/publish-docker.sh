@@ -1,0 +1,29 @@
+#!/bin/bash
+set -eo pipefail
+
+if [ -n "${DOCKERHUB_USERNAME}" ]; then
+  docker login -u "${DOCKERHUB_USERNAME}" -p "${DOCKERHUB_PASSWORD}"
+fi
+
+version=$(git describe --always)
+
+docker_rules=$(plz query alltargets --include docker-build //...)
+
+fqns_to_push=()
+
+export DOCKER_BUILDKIT=1
+for rule in ${docker_rules}; do
+  plz run "${rule}_load"
+  fqn=$(cat $(plz build "${rule}_fqn" | tail -n1 | tr -s " "))
+  repo="$(echo "${fqn}" | cut -f1 -d\:)"
+  fqn_version="${repo}:${version}"
+  echo ""
+  echo "-> tagging as ${fqn_version}"
+  docker tag "${fqn}" "${fqn_version}"
+  fqns_to_push+=("${fqn_version}")
+done
+
+for fqn_to_push in "${fqns_to_push[@]}"; do
+  echo "-> pushing as ${fqn_to_push}"
+  docker push "${fqn_to_push}"
+done
