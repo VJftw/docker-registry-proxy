@@ -2,7 +2,7 @@
 set -eo pipefail
 
 if [ -n "${DOCKERHUB_USERNAME}" ]; then
-  docker login -u "${DOCKERHUB_USERNAME}" -p "${DOCKERHUB_PASSWORD}"
+  echo "${DOCKERHUB_PASSWORD}" | docker login --username "${DOCKERHUB_USERNAME}" --password-stdin
 fi
 
 version=$(git describe --always)
