@@ -4,3 +4,5 @@ bin/
 
 .plz_*/
 plz-out/
+
+.vscode
