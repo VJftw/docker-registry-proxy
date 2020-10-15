@@ -21,4 +21,4 @@ jobs:
         run: ./pleasew test //...
 
       - name: Create pre-release
-        run: ./please run //scripts:pre-release
+        run: ./pleasew run //scripts:pre-release
