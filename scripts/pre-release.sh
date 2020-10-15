@@ -1,4 +1,5 @@
-#!/bin/bash -e
+#!/bin/bash
+set -euo pipefail
 
 version=$(git describe --always)
 
@@ -34,9 +35,12 @@ if [ -z "${release_id}" ] || [ "${release_id}" == "null" ]; then
 fi
 echo "-> created release ${release_id}"
 
-assets=$(find ./dist -type f)
+assets=$(find plz-out/bin/cmd -executable -type f \( ! -iname ".*" ! -iname "*_test" \))
 for asset in ${assets}; do
-  asset_name="${asset//\.\/dist\//}"
+  asset_name="${asset//plz-out\/bin\/cmd\//}"
+  asset_name=$(dirname "${asset_name}")
+  asset_name="${asset_name//\//_}"
+  echo "${asset_name}: ${asset}"
   asset_resp=$(curl \
   --header "Accept: ${github_api_version}" \
   --header "Authorization: token ${GITHUB_TOKEN}" \
