@@ -9,4 +9,5 @@ go_binary(
         "//third_party/go:spf13_viper",
         "//third_party/go:k8s_cri-api",
     ],
+    visibility = ["//build/clients/kubelet-image-service/..."],
 )

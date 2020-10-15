@@ -1,7 +1,6 @@
 FROM scratch
 
-COPY dist/kubelet-image-service /bin/
-COPY dist/plugin* /plugins/
+COPY /kubelet-image-service /bin/
 VOLUME /tmp
 VOLUME /var/run/kubelet
 

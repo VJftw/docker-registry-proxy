@@ -8,4 +8,5 @@ go_binary(
         "//pkg/runtimes/docker/registryproxy",
         "//third_party/go:spf13_viper",
     ],
+    visibility = ["//build/docker-registry-proxy/..."],
 )
