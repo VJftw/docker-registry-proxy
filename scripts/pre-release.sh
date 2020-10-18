@@ -19,6 +19,8 @@ post_release_json=$(cat <<EOF
 EOF
 )
 
+echo "-> creating release ${version}"
+
 release_resp=$(curl \
   --header "Accept: ${github_api_version}" \
   --header "Authorization: token ${GITHUB_TOKEN}" \
