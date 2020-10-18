@@ -12,11 +12,6 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-      
-      - name: print git tags
-        run: git tag --list
 
       - name: Please build
         run: ./pleasew build //...
