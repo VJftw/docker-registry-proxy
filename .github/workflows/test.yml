@@ -5,8 +5,16 @@ jobs:
     name: Test
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code into the Go module directory
+      - name: Check out code
         uses: actions/checkout@v2
+
+      - name: Please cache
+        uses: actions/cache@v2
+        with:
+          path: ./plz-out/
+          key: ${{ runner.os }}-plz-${{ hashFiles('**') }}
+          restore-keys: |
+            ${{ runner.os }}-plz-
 
       - name: Please build
         run: ./pleasew build //...
